@@ -31,7 +31,7 @@ class Client
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $phone_number;
+    private $phonenumber;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -63,8 +63,14 @@ class Client
      */
     private $repairs;
 
+    /**
+     * @ORM\Column(type="boolean", options={"default": true})
+     */
+    private $isActive;
+
     public function __construct()
     {
+        $this->setIsActive(true);
         $this->date_create = new \DateTime();
         $this->repairs = new ArrayCollection();
     }
@@ -100,12 +106,12 @@ class Client
 
     public function getPhoneNumber(): ?string
     {
-        return $this->phone_number;
+        return $this->phonenumber;
     }
 
-    public function setPhoneNumber(string $phone_number): self
+    public function setPhoneNumber(string $phonenumber): self
     {
-        $this->phone_number = $phone_number;
+        $this->phonenumber = $phonenumber;
 
         return $this;
     }
@@ -197,6 +203,18 @@ class Client
                 $repair->setClient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): self
+    {
+        $this->isActive = $isActive;
 
         return $this;
     }

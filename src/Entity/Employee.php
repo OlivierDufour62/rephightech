@@ -68,9 +68,15 @@ class Employee
      */
     private $repairs;
 
+    /**
+     * @ORM\Column(type="boolean", options={"default": true})
+     */
+    private $isActive;
+
     public function __construct()
     {
         $this->setRole('ROLE_USER');
+        $this->setIsActive(true);
         $this->setDateCreate(new \DateTime('now'));
         $this->repairs = new ArrayCollection();
     }
@@ -223,6 +229,18 @@ class Employee
     public function setGenre($genre)
     {
         $this->genre = $genre;
+
+        return $this;
+    }
+
+    public function getIsActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): self
+    {
+        $this->isActive = $isActive;
 
         return $this;
     }

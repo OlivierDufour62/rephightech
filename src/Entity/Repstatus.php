@@ -46,6 +46,16 @@ class Repstatus
      */
     private $rep;
 
+    /**
+     * @ORM\Column(type="boolean", options={"default": true})
+     */
+    private $isActive;
+
+    public function __construct()
+    {
+        $this->setIsActive(true);
+    }
+
     public function getId(): ?int
     {
         $this->setDateCreate(new \DateTime('now'));
@@ -120,6 +130,18 @@ class Repstatus
     public function setRep(?repair $rep): self
     {
         $this->rep = $rep;
+
+        return $this;
+    }
+
+    public function getIsActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): self
+    {
+        $this->isActive = $isActive;
 
         return $this;
     }

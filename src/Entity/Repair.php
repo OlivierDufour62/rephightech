@@ -64,7 +64,7 @@ class Repair
     private $client;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\employee", inversedBy="repairs")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Employee", inversedBy="repairs")
      * @ORM\JoinColumn(nullable=false)
      */
     private $emp;
@@ -74,8 +74,14 @@ class Repair
      */
     private $repstatuses;
 
+    /**
+     * @ORM\Column(type="boolean", options={"default": true})
+     */
+    private $isActive;
+
     public function __construct()
     {
+        $this->setIsActive(true);
         $this->setDateCreate(new \DateTime('now'));
         $this->repstatuses = new ArrayCollection();
     }
@@ -232,6 +238,18 @@ class Repair
                 $repstatus->setRep(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): self
+    {
+        $this->isActive = $isActive;
 
         return $this;
     }

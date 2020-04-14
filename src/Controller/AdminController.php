@@ -42,7 +42,7 @@ class AdminController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $allCustomer = $entityManager->getRepository(Client::class)->findAll();
         return $this->render('admin/customer.html.twig', [
-            'customer' => $allCustomer,
+            'allCustomer' => $allCustomer,
         ]);
     }
 
@@ -68,6 +68,7 @@ class AdminController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($employee);
             $entityManager->flush();
+            return new JsonResponse(true);
         }
         return $this->render('admin/add_employee.html.twig', [ 'form' => $form->createView()
         ]);
@@ -93,7 +94,13 @@ class AdminController extends AbstractController
                                 ->find($id);
         $formClient = $this->createForm(ClientType::class, $customer);
         $formClient->handleRequest($request);
-
+        if ($formClient->isSubmitted() && $formClient->isValid()) {
+            
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($customer);
+            $entityManager->flush();
+            return new JsonResponse(true);
+        }
         return $this->render('admin/edit_customer.html.twig', [
             'customer' => $customer, 'form'=>$formClient->createView(),
         ]);
