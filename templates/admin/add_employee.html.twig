@@ -1,0 +1,47 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}add employee
+{% endblock %}
+{% block h2 %}Ajouter un employé{% endblock %}
+{% block content %}
+	
+
+	<div class="col-10 mt-5 p-0 ">
+                    <div class="d-flex flex-column justify-content-center">
+                        {{ form_start(form, {'attr': {'class': 'col-12 mx-auto ajaxform'}})}}
+                            <div class="mt-4 col-2 mx-auto">
+                                <div class="form-check col">
+                                {{ form_widget(form.genre, {'attr': {'class': 'form-control radio-custom'}})}}
+                                    {# <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1"
+                                        value="option1" checked>
+                                    <label class="form-check-label" for="exampleRadios1">Monsieur</label> #}
+                                </div>
+                                {# <div class="form-check col">
+                                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2"
+                                        value="option2">
+                                    <label class="form-check-label" for="exampleRadios2">Madame<label> 
+                                </div> #}
+                            </div>
+                            <div class="row w-100 col-6 p-0 m-0 mx-auto mt-4">
+                                <div class="col">
+                                    {{ form_widget(form.lastname, {'attr': {'class': 'form-control', 'placeholder': 'Nom'}})}}
+                                </div>
+                                <div class="col">
+                                    {{ form_widget(form.firstname, {'attr': {'class': 'form-control', 'placeholder': 'Prénom'}})}}
+                                </div>
+                            </div>
+                            <div class="row w-100 col-6 p-0 m-0 mx-auto mt-4">
+                                <div class="col">
+                                    {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email' }})}}
+                                </div>
+                                <div class="col">
+                                    {{ form_widget(form.phonenumber, {'attr': {'class': 'form-control', 'placeholder': 'Téléphone'}})}}
+                                </div>
+                            </div>
+                            <div class="mt-4 d-flex justify-content-center">
+                                <button class="btn bg-black text-white my-2 my-sm-0 ml-3" type="submit">Enregistrer</button>
+                            </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+{% endblock %}

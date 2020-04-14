@@ -1,0 +1,15 @@
+.bg-black{
+    background-color: black;
+}
+
+.text-red{
+    color: red;
+}
+
+.resize{
+    resize: none;
+}
+
+.bord{
+    border: none !important;
+}

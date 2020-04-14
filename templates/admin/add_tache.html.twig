@@ -1,0 +1,74 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}add tache
+{% endblock %}
+{% block h2 %}Ajouter une tâche
+{% endblock %}
+{% block content %}
+
+
+	<form class="col-10 d-flex mt-5">
+		<div class="w-100 d-flex justify-content-around">
+			<div>
+				<div class="row">
+					<div class="col">
+						<label for="">Date de prise en charge</label>
+						<input type="date" class="form-control">
+					</div>
+					<div class="col">
+						<label for="">Date de fin estimée</label>
+						<input type="date" class="form-control">
+					</div>
+				</div>
+				<div class="col mx-auto mt-4">
+					<input type="text" class="form-control" placeholder="Durée estimée">
+				</div>
+				<div class="form-group">
+					<textarea class="form-control resize mt-4" id="" placeholder="Description" rows="5"></textarea>
+				</div>
+				<div class="form-group">
+					<input type="file" class="form-control-file" id="">
+				</div>
+			</div>
+			<div class="col-5">
+				<div class="row mx-auto">
+					<input class="form-control mr-sm-2 col-10" type="search" placeholder="Email">
+					<div>
+						<button class="btn bg-black text-white my-2 my-sm-0 ml-3" type="submit">Valider</button>
+					</div>
+				</div>
+				<div class="col-12 mt-5 p-0">
+					<div class="mt-4">
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+							<label class="form-check-label" for="exampleRadios1">Monsieur</label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+							<label class="form-check-label" for="exampleRadios2">Madame<label></div>
+							</div>
+							<div class="row p-0 mt-4">
+								<div class="col">
+									<input type="text" class="form-control" placeholder="Nom">
+								</div>
+								<div class="col">
+									<input type="text" class="form-control" placeholder="Prénom">
+								</div>
+							</div>
+							<div class="row  mt-4">
+								<div class="col">
+									<input type="email" class="form-control" placeholder="email">
+								</div>
+								<div class="col">
+									<input type="text" class="form-control" placeholder="Téléphone">
+								</div>
+							</div>
+							<div class="mt-4 d-flex justify-content-end">
+								<button class="btn bg-black text-white my-2 my-sm-0 ml-3" type="submit">Enregistrer
+									                                        Réparation</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		{% endblock %}

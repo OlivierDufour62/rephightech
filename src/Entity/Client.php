@@ -1,0 +1,203 @@
+<?php
+
+namespace App\Entity;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity(repositoryClass="App\Repository\ClientRepository")
+ */
+class Client
+{
+    /**
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $lastname;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $firstname;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $phone_number;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $email;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $genre;
+
+    /**
+     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
+     */
+    private $date_create;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $date_update;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $date_delete;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Repair", mappedBy="client")
+     */
+    private $repairs;
+
+    public function __construct()
+    {
+        $this->date_create = new \DateTime();
+        $this->repairs = new ArrayCollection();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): self
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(string $firstname): self
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getPhoneNumber(): ?string
+    {
+        return $this->phone_number;
+    }
+
+    public function setPhoneNumber(string $phone_number): self
+    {
+        $this->phone_number = $phone_number;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getGenre(): ?bool
+    {
+        return $this->genre;
+    }
+
+    public function setGenre(bool $genre): self
+    {
+        $this->genre = $genre;
+
+        return $this;
+    }
+
+    public function getDateCreate(): ?\DateTimeInterface
+    {
+        return $this->date_create;
+    }
+
+    public function setDateCreate(\DateTimeInterface $date_create): self
+    {
+        $this->date_create = $date_create;
+
+        return $this;
+    }
+
+    public function getDateUpdate(): ?\DateTimeInterface
+    {
+        return $this->date_update;
+    }
+
+    public function setDateUpdate(?\DateTimeInterface $date_update): self
+    {
+        $this->date_update = $date_update;
+
+        return $this;
+    }
+
+    public function getDateDelete(): ?\DateTimeInterface
+    {
+        return $this->date_delete;
+    }
+
+    public function setDateDelete(?\DateTimeInterface $date_delete): self
+    {
+        $this->date_delete = $date_delete;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Repair[]
+     */
+    public function getRepairs(): Collection
+    {
+        return $this->repairs;
+    }
+
+    public function addRepair(Repair $repair): self
+    {
+        if (!$this->repairs->contains($repair)) {
+            $this->repairs[] = $repair;
+            $repair->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRepair(Repair $repair): self
+    {
+        if ($this->repairs->contains($repair)) {
+            $this->repairs->removeElement($repair);
+            // set the owning side to null (unless already changed)
+            if ($repair->getClient() === $this) {
+                $repair->setClient(null);
+            }
+        }
+
+        return $this;
+    }
+}

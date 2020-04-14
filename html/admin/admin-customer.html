@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+    <link rel="stylesheet" href="../../public/assets/css/icofont/icofont.css">
+    <link rel="stylesheet" href="../../public/assets/css/main.css">
+    <title>list customer</title>
+</head>
+
+<body>
+    <header>
+        <div class="container-fluid p-0 m-0 bg-black">
+            <div class="d-flex w-75 mx-auto p-0">
+                <div class="col-3 ">
+                    <img src="../../public/assets/img/logo.png" alt="" class="logo">
+                </div>
+                <div class="col-6 text-white d-flex justify-content-center my-auto ">
+                    <h2>Liste des clients</h2>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-2 bg-black mx-auto">
+                    <nav class="d-flex justify-content-start mt-5 p-0 m-0">
+                        <ul class="list-unstyled d-flex flex-column mx-auto">
+                            <a class="btn text-white" href="#">
+                                <li>Accueil</li>
+                            </a>
+                            <a class="btn text-white" href="admin-employee.html">
+                                <li>Employé</li>
+                            </a>
+                            <a class="btn text-white" href="admin-intervention.html">
+                                <li>Interventions</li>
+                            </a>
+                            <a class="btn text-white" href="admin-customer.html">
+                                <li>Clients</li>
+                            </a>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-10 mt-5">
+                    <table class="table table-striped table-dark text-center">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Nom</th>
+                                <th scope="col">Prénom</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Téléphone</th>
+                                <th scope="col">Éditer</th>
+                                <th scope="col">Supprimer</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Dufour</td>
+                                <td>Olivier</td>
+                                <td>olivier.dufour62@yahoo.com</td>
+                                <td>0606060606</td>
+                                <td><a href="admin-edit-customer.html"><i class="icofont-arrow-right text-white"></a></i></td>
+                                <td>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="customSwitches">
+                                        <label class="custom-control-label" for="customSwitches"></label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Laslaa</td>
+                                <td>Mohammed</td>
+                                <td>mohamed.laslaa62@yahoo.com</td>
+                                <td>0606060606</td>
+                                <td><a href="admin-edit-customer.html"><i class="icofont-arrow-right text-white"></a></i></td>
+                                <td>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="customSwitches">
+                                        <label class="custom-control-label" for="customSwitches"></label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Devise</td>
+                                <td>Théo</td>
+                                <td>t.devise62@yahoo.com</td>
+                                <td>0606060606</td>
+                                <td><a href="admin-edit-customer.html"><i class="icofont-arrow-right text-white"></a></i></td>
+                                <td>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="customSwitches">
+                                        <label class="custom-control-label" for="customSwitches"></label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="https://kit.fontawesome.com/a2bab1df4f.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</body>
+
+</html>
