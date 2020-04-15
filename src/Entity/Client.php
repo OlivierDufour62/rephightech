@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -44,14 +45,21 @@ class Client
     private $genre;
 
     /**
-     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
-     */
+    * @var \DateTime $date_create
+    *
+    * @Gedmo\Timestampable(on="create")
+    * @ORM\Column(type="datetime")
+    */
     private $date_create;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @var \DateTime $date_update
+     *
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
      */
     private $date_update;
+
 
     /**
      * @ORM\Column(type="datetime", nullable=true)

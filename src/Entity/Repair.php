@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -39,12 +40,18 @@ class Repair
     private $image;
 
     /**
-     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
-     */
+    * @var \DateTime $date_create
+    *
+    * @Gedmo\Timestampable(on="create")
+    * @ORM\Column(type="datetime")
+    */
     private $date_create;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @var \DateTime $date_update
+     *
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime")
      */
     private $date_update;
 
@@ -59,13 +66,13 @@ class Repair
     private $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Client", inversedBy="repairs")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Client", inversedBy="repairs", cascade={"persist"})
      */
     private $client;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Employee", inversedBy="repairs")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $emp;
 
@@ -78,6 +85,7 @@ class Repair
      * @ORM\Column(type="boolean", options={"default": true})
      */
     private $isActive;
+    
 
     public function __construct()
     {

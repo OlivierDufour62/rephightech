@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Client;
 use App\Entity\Employee;
+use App\Entity\Repair;
 use App\Form\ClientType;
+use App\Form\TacheType;
 use App\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -77,10 +79,22 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/addtache", name="admin_addtache")
      */
-    public function addTache()
+    public function addTache(Request $request)
     {
+        $repair = new Repair();
+        $form = $this->createForm(TacheType::class, $repair);
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($repair);
+            $entityManager->flush();
+            // return new JsonResponse(true);
+        }
+
         return $this->render('admin/add_tache.html.twig', [
-            'controller_name' => 'AdminController',
+            'form' => $form->createView()
         ]);
     }
 
