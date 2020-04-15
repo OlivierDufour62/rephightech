@@ -1,5 +1,10 @@
 {% extends 'admin/base.html.twig' %}
 
+{% form_theme form _self %}
+{%- block radio_widget -%}
+<input type="radio" name="{{ fullname }}" id="radio{{ value }}" value="{{ value }}" {% if checked %} checked="checked"{% endif %} />
+{%- endblock radio_widget -%}
+
 {% block title %}add tache
 {% endblock %}
 {% block h2 %}Ajouter une tâche

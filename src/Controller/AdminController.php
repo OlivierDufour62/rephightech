@@ -12,6 +12,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\FileUploader;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 
 class AdminController extends AbstractController
 {
@@ -79,14 +82,18 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/addtache", name="admin_addtache")
      */
-    public function addTache(Request $request)
+    public function addTache(Request $request, FileUploader $fileUploader)
     {
         $repair = new Repair();
         $form = $this->createForm(TacheType::class, $repair);
         $form->handleRequest($request);
-        
         if ($form->isSubmitted() && $form->isValid()) {
-            
+            /** @var UploadedFile $image */
+            $image = $form['image']->getData();
+            if ($image) {
+                $imageFileName = $fileUploader->upload($image);
+                $repair->setImage($imageFileName);
+            }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($repair);
             $entityManager->flush();

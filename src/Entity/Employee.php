@@ -86,6 +86,7 @@ class Employee
         $this->setRole('ROLE_USER');
         $this->setIsActive(true);
         $this->setDateCreate(new \DateTime('now'));
+        $this->date_update = new \DateTime();
         $this->repairs = new ArrayCollection();
     }
 

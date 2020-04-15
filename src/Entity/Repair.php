@@ -91,6 +91,7 @@ class Repair
     {
         $this->setIsActive(true);
         $this->setDateCreate(new \DateTime('now'));
+        $this->date_update = new \DateTime();
         $this->repstatuses = new ArrayCollection();
     }
 

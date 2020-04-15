@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
+use Symfony\Component\Validator\Constraints\File;
 
 class TacheType extends AbstractType
 {
@@ -20,7 +20,15 @@ class TacheType extends AbstractType
             ->add('date_supported', DateType::class)
             ->add('date_end', DateType::class)
             ->add('duration', TextType::class)
-            ->add('image', FileType::class)
+            ->add('image', FileType::class,  ['constraints' => [
+                new File([
+                    'mimeTypes' => [
+                        'image/jpeg',
+                        'image/png',
+                        'image/webp'
+                    ],
+                ])
+            ]])
             ->add('description', TextareaType::class)
             ->add('client', ClientType::class)
         ;

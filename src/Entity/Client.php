@@ -80,6 +80,7 @@ class Client
     {
         $this->setIsActive(true);
         $this->date_create = new \DateTime();
+        $this->date_update = new \DateTime();
         $this->repairs = new ArrayCollection();
     }
 
