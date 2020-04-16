@@ -22,12 +22,12 @@ class Repair
     /**
      * @ORM\Column(type="date")
      */
-    private $date_supported;
+    private $dateSupported;
 
     /**
      * @ORM\Column(type="date", nullable=true)
      */
-    private $date_end;
+    private $dateEnd;
 
     /**
      * @ORM\Column(type="integer")
@@ -102,24 +102,24 @@ class Repair
 
     public function getDateSupported(): ?\DateTimeInterface
     {
-        return $this->date_supported;
+        return $this->dateSupported;
     }
 
-    public function setDateSupported(\DateTimeInterface $date_supported): self
+    public function setDateSupported(\DateTimeInterface $dateSupported): self
     {
-        $this->date_supported = $date_supported;
+        $this->dateSupported = $dateSupported;
 
         return $this;
     }
 
     public function getDateEnd(): ?\DateTimeInterface
     {
-        return $this->date_end;
+        return $this->dateEnd;
     }
 
-    public function setDateEnd(?\DateTimeInterface $date_end): self
+    public function setDateEnd(?\DateTimeInterface $dateEnd): self
     {
-        $this->date_end = $date_end;
+        $this->dateEnd = $dateEnd;
 
         return $this;
     }
@@ -262,4 +262,5 @@ class Repair
 
         return $this;
     }
+
 }

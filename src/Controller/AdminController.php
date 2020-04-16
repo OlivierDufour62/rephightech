@@ -6,6 +6,7 @@ use App\Entity\Client;
 use App\Entity\Employee;
 use App\Entity\Repair;
 use App\Form\ClientType;
+use App\Form\SearchType;
 use App\Form\TacheType;
 use App\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -56,8 +57,11 @@ class AdminController extends AbstractController
      */
     public function intervention()
     {
+        $entityManager = $this->getDoctrine()->getManager();
+        $allRepair = $entityManager->getRepository(Repair::class)->findAll();
+        // $allRepair->get
         return $this->render('admin/intervention.html.twig', [
-            'controller_name' => 'AdminController',
+            'allrepair' => $allRepair
         ]);
     }
 
@@ -75,7 +79,8 @@ class AdminController extends AbstractController
             $entityManager->flush();
             return new JsonResponse(true);
         }
-        return $this->render('admin/add_employee.html.twig', [ 'form' => $form->createView()
+        return $this->render('admin/add_employee.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 
@@ -99,10 +104,33 @@ class AdminController extends AbstractController
             $entityManager->flush();
             // return new JsonResponse(true);
         }
-
         return $this->render('admin/add_tache.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * @Route("/admin/searchcustomer", name="admin_search_customer")
+     */
+    public function searchCustomer(Request $request)
+    {
+        //$customerEmail = new Client();
+        //$email = $customerEmail->getEmail();
+        // $formEmail = $this->createForm(SearchType::class);
+        // $formEmail->handleRequest($request);
+        
+        if ($request->isXmlHttpRequest() || $request->query->get('email') !== '') {
+            $email = $request->query->get('email');
+            
+            $entityManager = $this->getDoctrine()->getManager();
+            $customer = $entityManager->getRepository(Client::class)
+                                    ->findBy(['email'=>$email])[0];
+                                    // dd($customer[0]->getLastname());
+            $client = ['lastname'=>$customer->getLastname(), 'firstname'=>$customer->getFirstname(), 'email'=>$customer->getEmail(), 'phonenumber'=>$customer->getPhoneNumber(),'genre'=>$customer->getGenre()];
+            return new JsonResponse($client);
+        }else{
+            return new JsonResponse(false);
+        }
     }
 
     /**
@@ -112,23 +140,23 @@ class AdminController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $customer = $entityManager->getRepository(Client::class)
-                                ->find($id);
+            ->find($id);
         $formClient = $this->createForm(ClientType::class, $customer);
         $formClient->handleRequest($request);
         if ($formClient->isSubmitted() && $formClient->isValid()) {
-            
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($customer);
             $entityManager->flush();
             return new JsonResponse(true);
         }
         return $this->render('admin/edit_customer.html.twig', [
-            'customer' => $customer, 'form'=>$formClient->createView(),
+            'customer' => $customer, 'form' => $formClient->createView(),
         ]);
     }
 
     /**
-     * @Route("/admin/editintervention", name="admin_editintervention")
+     * @Route("/admin/editintervention/{id}", name="admin_editintervention")
      */
     public function editIntervention()
     {
@@ -145,11 +173,11 @@ class AdminController extends AbstractController
 
         $entityManager = $this->getDoctrine()->getManager();
         $employee = $entityManager->getRepository(Employee::class)
-                                ->find($id);
+            ->find($id);
         $form = $this->createForm(UserType::class, $employee);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($employee);
             $entityManager->flush();
@@ -157,7 +185,7 @@ class AdminController extends AbstractController
         }
 
         return $this->render('admin/edit_employee.html.twig', [
-            'employee' => $employee, 'form'=>$form->createView(),
+            'employee' => $employee, 'form' => $form->createView(),
         ]);
     }
 }

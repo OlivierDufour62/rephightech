@@ -19,11 +19,12 @@
 				</tr>
 			</thead>
 			<tbody>
+			{% for repair in allrepair %}
 				<tr>
-					<th scope="row">1</th>
-					<td>Dufour</td>
-					<td>13/04/2020</td>
-					<td>15/04/2020</td>
+					<th scope="row"> {{repair.id}} </th>
+					<td>{{repair.client.lastname}}</td>
+					<td>{{repair.dateSupported|date('d-m-Y') }}</td>
+					<td>{{repair.dateEnd|date('d-m-Y') }}</td>
 					<td>En attente</td>
 					<td>
 						<a href="/admin/editintervention">
@@ -37,42 +38,7 @@
 						</div>
 					</td>
 				</tr>
-				<tr>
-					<th scope="row">2</th>
-					<td>Laslaa</td>
-					<td>13/04/2020</td>
-					<td>15/04/2020</td>
-					<td>En attente</td>
-					<td>
-						<a href="/admin/editintervention">
-							<i class="icofont-arrow-right text-white"></a>
-						</i>
-					</td>
-					<td>
-						<div class="custom-control custom-switch">
-							<input type="checkbox" class="custom-control-input" id="customSwitches">
-							<label class="custom-control-label" for="customSwitches"></label>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row">3</th>
-					<td>Devise</td>
-					<td>13/04/2020</td>
-					<td>15/04/2020</td>
-					<td>En attente</td>
-					<td>
-						<a href="/admin/editintervention">
-							<i class="icofont-arrow-right text-white"></a>
-						</i>
-					</td>
-					<td>
-						<div class="custom-control custom-switch">
-							<input type="checkbox" class="custom-control-input" id="customSwitches">
-							<label class="custom-control-label" for="customSwitches"></label>
-						</div>
-					</td>
-				</tr>
+			{% endfor %}
 			</tbody>
 		</table>
 		<div class="d-flex justify-content-end">
