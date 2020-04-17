@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Client;
 use App\Entity\Employee;
 use App\Entity\Repair;
+use App\Entity\Status;
 use App\Form\ClientType;
 use App\Form\EditTacheType;
 use App\Form\TacheType;
@@ -90,6 +91,8 @@ class AdminController extends AbstractController
      */
     public function addTache(Request $request, FileUploader $fileUploader)
     {
+        $status = new Status();
+        
         $repair = new Repair();
         $form = $this->createForm(TacheType::class, $repair);
         $form->handleRequest($request);
@@ -100,7 +103,9 @@ class AdminController extends AbstractController
                 $imageFileName = $fileUploader->upload($image);
                 $repair->setImage($imageFileName);
             }
+            
             $entityManager = $this->getDoctrine()->getManager();
+            $status->setName('En attente');
             $entityManager->persist($repair);
             $entityManager->flush();
             return new JsonResponse(true);
