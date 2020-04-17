@@ -85,6 +85,11 @@ class Repair
      * @ORM\Column(type="boolean", options={"default": true})
      */
     private $isActive;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Status", inversedBy="rep", cascade={"persist"})
+     */
+    private $status;
     
 
     public function __construct()
@@ -260,6 +265,17 @@ class Repair
     {
         $this->isActive = $isActive;
 
+        return $this;
+    }
+
+    public function getStatus(): ?Status
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?Status $status): self
+    {
+        $this->status = $status;
         return $this;
     }
 

@@ -12,25 +12,25 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
 
-class TacheType extends AbstractType
+class EditTacheType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('dateSupported', DateType::class)
-            ->add('dateEnd', DateType::class)
-            ->add('duration', TextType::class)
-            ->add('image', FileType::class,  ['constraints' => [
-                new File([
-                    'mimeTypes' => [
-                        'image/jpeg',
-                        'image/png',
-                        'image/webp'
-                    ],
-                ])
-            ]])
-            ->add('description', TextareaType::class)
-            ->add('client', ClientType::class)
+        ->add('dateSupported', DateType::class)
+        ->add('dateEnd', DateType::class)
+        ->add('duration', TextType::class)
+        ->add('image', FileType::class , array('data_class' => null) ,  ['constraints' => [
+            new File([
+                'mimeTypes' => [
+                    'image/jpeg',
+                    'image/png',
+                    'image/webp'
+                ],
+            ])
+        ]])
+        ->add('description', TextareaType::class)
+        ->add('status', StatusType::class)
         ;
     }
 

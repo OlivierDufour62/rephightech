@@ -6,7 +6,7 @@ use App\Entity\Client;
 use App\Entity\Employee;
 use App\Entity\Repair;
 use App\Form\ClientType;
-use App\Form\SearchType;
+use App\Form\EditTacheType;
 use App\Form\TacheType;
 use App\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,7 +34,8 @@ class AdminController extends AbstractController
     public function employee()
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $allEmployee = $entityManager->getRepository(Employee::class)->findAll();
+        $allEmployee = $entityManager->getRepository(Employee::class)
+                            ->findAll();
         return $this->render('admin/employee.html.twig', [
             'allEmployee' => $allEmployee,
         ]);
@@ -102,7 +103,7 @@ class AdminController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($repair);
             $entityManager->flush();
-            // return new JsonResponse(true);
+            return new JsonResponse(true);
         }
         return $this->render('admin/add_tache.html.twig', [
             'form' => $form->createView()
@@ -114,21 +115,14 @@ class AdminController extends AbstractController
      */
     public function searchCustomer(Request $request)
     {
-        //$customerEmail = new Client();
-        //$email = $customerEmail->getEmail();
-        // $formEmail = $this->createForm(SearchType::class);
-        // $formEmail->handleRequest($request);
-        
         if ($request->isXmlHttpRequest() || $request->query->get('email') !== '') {
             $email = $request->query->get('email');
-            
             $entityManager = $this->getDoctrine()->getManager();
             $customer = $entityManager->getRepository(Client::class)
-                                    ->findBy(['email'=>$email])[0];
-                                    // dd($customer[0]->getLastname());
-            $client = ['lastname'=>$customer->getLastname(), 'firstname'=>$customer->getFirstname(), 'email'=>$customer->getEmail(), 'phonenumber'=>$customer->getPhoneNumber(),'genre'=>$customer->getGenre()];
+                ->findBy(['email' => $email])[0];
+            $client = ['lastname' => $customer->getLastname(), 'firstname' => $customer->getFirstname(), 'email' => $customer->getEmail(), 'phonenumber' => $customer->getPhoneNumber(), 'genre' => $customer->getGenre()];
             return new JsonResponse($client);
-        }else{
+        } else {
             return new JsonResponse(false);
         }
     }
@@ -144,7 +138,6 @@ class AdminController extends AbstractController
         $formClient = $this->createForm(ClientType::class, $customer);
         $formClient->handleRequest($request);
         if ($formClient->isSubmitted() && $formClient->isValid()) {
-
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($customer);
             $entityManager->flush();
@@ -158,10 +151,27 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/editintervention/{id}", name="admin_editintervention")
      */
-    public function editIntervention()
+    public function editIntervention(Request $request, Repair $repair,FileUploader $fileUploader)
     {
+        // $entityManager = $this->getDoctrine()->getManager();
+        // $repair = $entityManager->getRepository(Repair::class)
+        //                         ->find($id);
+        $formRepair = $this->createForm(EditTacheType::class, $repair);
+        $formRepair->handleRequest($request);
+        if ($formRepair->isSubmitted() && $formRepair->isValid()) {
+            /** @var UploadedFile $image */
+            $image = $formRepair['image']->getData();
+            if ($image) {
+                $imageFileName = $fileUploader->upload($image);
+                $repair->setImage($imageFileName);
+            }
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($repair);
+            $entityManager->flush();
+            //return new JsonResponse(true);
+        }
         return $this->render('admin/edit_intervention.html.twig', [
-            'controller_name' => 'AdminController',
+            'repair' => $repair, 'formrepair' => $formRepair->createView()
         ]);
     }
 
@@ -170,22 +180,73 @@ class AdminController extends AbstractController
      */
     public function editEmployee(Request $request, $id)
     {
-
         $entityManager = $this->getDoctrine()->getManager();
         $employee = $entityManager->getRepository(Employee::class)
             ->find($id);
         $form = $this->createForm(UserType::class, $employee);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($employee);
             $entityManager->flush();
             return new JsonResponse(true);
         }
-
         return $this->render('admin/edit_employee.html.twig', [
             'employee' => $employee, 'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/admin/customerisactive/{id}", name="customerisactive")
+     */
+
+    public function customerIsActive($id)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $customer = $entityManager->getRepository(Client::class)
+                                ->find($id);
+        if(!$customer){
+            return new JsonResponse(false);
+        }
+        $customer->setIsActive(!$customer->getIsActive());
+        $entityManager->persist($customer);
+        $entityManager->flush();
+        return new JsonResponse(true);
+    }
+
+    /**
+     * @Route("/admin/employeeisactive/{id}", name="employeeisactive")
+     */
+
+    public function employeeIsActive($id)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $customer = $entityManager->getRepository(Employee::class)
+                                ->find($id);
+        if(!$customer){
+            return new JsonResponse(false);
+        }
+        $customer->setIsActive(!$customer->getIsActive());
+        $entityManager->persist($customer);
+        $entityManager->flush();
+        return new JsonResponse(true);
+    }
+
+    /**
+     * @Route("/admin/repairisactive/{id}", name="repairisactive")
+     */
+
+    public function repairIsActive($id)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $customer = $entityManager->getRepository(Repair::class)
+                                ->find($id);
+        if(!$customer){
+            return new JsonResponse(false);
+        }
+        $customer->setIsActive(!$customer->getIsActive());
+        $entityManager->persist($customer);
+        $entityManager->flush();
+        return new JsonResponse(true);
     }
 }

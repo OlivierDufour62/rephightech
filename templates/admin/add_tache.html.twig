@@ -11,21 +11,23 @@
 {% endblock %}
 {% block content %}
 
-
+<div class="col-6 mx-auto bg text-white successsend d-none bg-success">
+			<p>Réparation enregistrer</p>
+		</div>
 	{# <form class="col-10 d-flex mt-5"> #}
-	{{ form_start(form, {'attr': {'class': 'col-10 d-flex mt-5'}})}}
+	{{ form_start(form, {'attr': {'class': 'col-10 d-flex mt-5 ajaxaddtache'}})}}
 
 	<div class="w-100 d-flex justify-content-around">
 		<div>
 			<div class="row">
 				<div class="col">
 					<label for="">Date de prise en charge</label>
-					{{ form_widget(form.date_supported, {'attr': {'class': 'form-control'}})}}
+					{{ form_widget(form.dateSupported, {'attr': {'class': 'form-control'}})}}
 					{# <input type="date" class="form-control"> #}
 				</div>
 				<div class="col">
 					<label for="">Date de fin estimée</label>
-					{{ form_widget(form.date_end, {'attr': {'class': 'form-control'}})}}
+					{{ form_widget(form.dateEnd, {'attr': {'class': 'form-control'}})}}
 					{# <input type="date" class="form-control"> #}
 				</div>
 			</div>
@@ -63,10 +65,6 @@
 							{% endfor %}
 						{# <label class="form-check-label" for="exampleRadios1">Monsieur</label> #}
 					</div>
-					{# <div class="form-check">
-						<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-							<label class="form-check-label" for="exampleRadios2">Madame<label></div>
-					</div> #}
 					<div class="row p-0 mt-4">
 						<div
 							class="col">
@@ -92,7 +90,7 @@
 						</div>
 					</div>
 					<div class="mt-4 d-flex justify-content-end">
-						<button class="btn bg-black text-white my-2 my-sm-0 ml-3" type="submit">Enregistrer Réparation</button>
+						<button class="btn bg-black text-white my-2 my-sm-0 ml-3" id="addtache" type="submit">Enregistrer Réparation</button>
 					</div>
 				</div>
 			</div>

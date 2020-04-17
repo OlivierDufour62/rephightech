@@ -18,10 +18,6 @@ class Repstatus
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $status;
-    /**
      * @ORM\Column(type="string", length=1000, nullable=true)
      */
     private $comment;
@@ -49,7 +45,7 @@ class Repstatus
     private $date_delete;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\repair", inversedBy="repstatuses")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Repair", inversedBy="repstatuses")
      * @ORM\JoinColumn(nullable=false)
      */
     private $rep;
@@ -58,6 +54,12 @@ class Repstatus
      * @ORM\Column(type="boolean", options={"default": true})
      */
     private $isActive;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Status", inversedBy="repstatuses")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $status;
 
     public function __construct()
     {
@@ -68,18 +70,6 @@ class Repstatus
     {
         $this->setDateCreate(new \DateTime('now'));
         return $this->id;
-    }
-
-    public function getStatus(): ?string
-    {
-        return $this->status;
-    }
-
-    public function setStatus(string $status): self
-    {
-        $this->status = $status;
-
-        return $this;
     }
 
     public function getComment(): ?string
@@ -150,6 +140,18 @@ class Repstatus
     public function setIsActive(bool $isActive): self
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    public function getStatus(): ?Status
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?Status $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }

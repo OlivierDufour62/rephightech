@@ -22,6 +22,7 @@
 			</thead>
 			<tbody>
 			{% for customer in allCustomer %}
+
 				<tr>
 					<th scope="row">{{ customer.id }}</th>
 					<td>{{ customer.lastname }}</td>
@@ -35,8 +36,8 @@
 					</td>
 					<td>
 						<div class="custom-control custom-switch">
-							<input type="checkbox" class="custom-control-input" id="customSwitches">
-							<label class="custom-control-label" for="customSwitches"></label>
+							<input type="checkbox" class="custom-control-input customerswitches" customerswitches="{{customer.id}}" id="customSwitches{{customer.id}}"  {% if customer.isActive %} checked {% endif %}>
+							<label class="custom-control-label" for="customSwitches{{customer.id}}"></label>
 						</div>
 					</td>
 				</tr>

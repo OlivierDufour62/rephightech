@@ -22,7 +22,7 @@
 			<tbody>
 				{% for employee in allEmployee %}
 				<tr>
-					<th scope="row">1</th>
+					<th scope="row">{{ employee.id }}</th>
 					<td>{{ employee.lastname }}</td>
 					<td>{{ employee.firstname }}</td>
 					<td>{{ employee.email }}</td>
@@ -34,7 +34,7 @@
 					</td>
 					<td>
 						<div class="custom-control custom-switch">
-							<input type="checkbox" class="custom-control-input" id="customSwitches{{employee.id}}">
+							<input type="checkbox" class="custom-control-input employeeswitches" id="customSwitches{{employee.id}}" employeeswitches="{{employee.id}}" {% if employee.isActive %} checked {% endif %}>
 							<label class="custom-control-label" for="customSwitches{{employee.id}}"></label>
 						</div>
 					</td>
