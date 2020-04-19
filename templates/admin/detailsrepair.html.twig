@@ -1,0 +1,59 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Details intervention
+{% endblock %}
+{% block h2 %}Détails intervention
+{% endblock %}
+{% block content %}
+
+
+	<div class="col-10 mt-5">
+    <div class="col-6 mx-auto bg text-white successsend d-none bg-success">
+			<p>Commentaire ajouté</p>
+		</div>
+		<div class="col-12 text-center refclient">
+			<p class="f-size-ref">XXXXXXXXX</p>
+		</div>
+		{{ form_start(formcomment, {'attr' : {'class': 'ajaxcomment', 'repairid': repair.id}})}}
+		<div class="col-2 mx-auto mb-3">
+			{{ form_widget(formcomment.status.name, {'attr': {'class': 'form-control'}})}}
+		</div>
+		<div class="d-flex justify-content-center">
+			<div class="mr-5">
+				<p class="f-size">{{ repair.client.lastname }}</p>
+			</div>
+			<div>
+				<p class="f-size">{{ repair.duration }}</p>
+			</div>
+		</div>
+		<div class="d-flex justify-content-center">
+			<div class="mr-5">
+				<p class="f-size">{{ repair.dateSupported|date('d-m-Y') }}</p>
+			</div>
+			<div>
+				<p class="f-size">{{ repair.dateEnd|date('d-m-Y') }}</p>
+			</div>
+		</div>
+		<div class="d-flex justify-content-center">
+			<p class="f-size">{{ repair.description }}</p>
+		</div>
+		<div class="d-flex justify-content-center">
+			<img class="col-3" src="/uploads/images/{{ repair.image }}" alt="">
+		</div>
+		<div class="col-8 d-flex flex-column justify-content-center mx-auto">
+			<div class="form-group col p-0 col-12">
+				{{ form_widget(formcomment.comment, {'attr': {'class': 'form-control resize mt-4','placeholder':'Commentaire', 'rows':'5'}})}}
+			</div>
+			<div class="mt-4 d-flex justify-content-center">
+                <a class="btn bg-black text-white" href="/admin/editintervention/{{repair.id}}">Éditer l'intervention</a>
+				<button class="btn bg-black text-white my-2 my-sm-0 ml-3 addcomment" id="" type="submit">Commenter</button>
+			</div>
+		</div>
+        <div>
+            
+        </div>
+	</div>
+
+	{{ form_end(formcomment) }}
+
+{% endblock %}

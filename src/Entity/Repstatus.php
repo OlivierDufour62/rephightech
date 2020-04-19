@@ -45,7 +45,7 @@ class Repstatus
     private $date_delete;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Repair", inversedBy="repstatuses")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Repair", inversedBy="repstatuses", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $rep;
@@ -56,19 +56,20 @@ class Repstatus
     private $isActive;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Status", inversedBy="repstatuses")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Status", inversedBy="repstatuses", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $status;
 
     public function __construct()
     {
+        $this->setDateCreate(new \DateTime());
+        $this->setDateUpdate(new \DateTime('now'));
         $this->setIsActive(true);
     }
 
     public function getId(): ?int
     {
-        $this->setDateCreate(new \DateTime('now'));
         return $this->id;
     }
 

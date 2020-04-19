@@ -47,8 +47,8 @@ $(document).ready(function () {
                     }, 1500);
                 }
             }
-        })
-    })
+        });
+    });
 
     $('#addemployee').on('click', function (e) {
         e.preventDefault();
@@ -71,8 +71,8 @@ $(document).ready(function () {
                     }, 1500);
                 }
             }
-        })
-    })
+        });
+    });
 
     $('#addtache').on('click', function (e) {
         e.preventDefault();
@@ -98,8 +98,8 @@ $(document).ready(function () {
                     }, 1500);
                 }
             }
-        })
-    })
+        });
+    });
 
     //search customer on admin part
     $('#search').on('click', function (e) {
@@ -120,8 +120,8 @@ $(document).ready(function () {
                     $('#tache_client_genre_1').attr("checked", "checked");
                 }
             }
-        })
-    })
+        });
+    });
 
     //search customer on public part
     $('#searchcustomer').on('click', function (e) {
@@ -142,8 +142,8 @@ $(document).ready(function () {
                     $('#tache_client_genre_1').attr("checked", "checked");
                 }
             }
-        })
-    })
+        });
+    });
 
     $('.customerswitches').on('change', function () {
         const id = $(this).attr('customerswitches');
@@ -151,7 +151,7 @@ $(document).ready(function () {
         $.ajax({
             url: `/admin/customerisactive/${id}`,
         }).done();
-    })
+    });
 
     $('.employeeswitches').on('change', function () {
         const id = $(this).attr('employeeswitches');
@@ -159,7 +159,7 @@ $(document).ready(function () {
         $.ajax({
             url: `/admin/employeeisactive/${id}`,
         }).done();
-    })
+    });
 
     $('.repairswitches').on('change', function () {
         const id = $(this).attr('repairswitches');
@@ -167,5 +167,29 @@ $(document).ready(function () {
         $.ajax({
             url: `/admin/repairisactive/${id}`,
         }).done();
-    })
+    });
+
+    $('.addcomment').on('click', function (e) {
+        e.preventDefault();
+        let data = {};
+        const id = $('.ajaxcomment').attr('repairid');
+        $('.ajaxcomment')
+            .serializeArray()
+            .forEach((object) => {
+                data[object.name] = object.value
+            });
+        $.ajax({
+            type: 'POST',
+            url: `/admin/details/${id}`,
+            data: data,
+            success: function (data) {
+                if (data === true) {
+                    $(".successsend").removeClass("d-none");
+                    setTimeout(function () {
+                        $(".successsend").addClass("d-none");
+                    }, 1500);
+                }
+            }
+        });
+    });
 });

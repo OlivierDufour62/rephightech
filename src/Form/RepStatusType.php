@@ -14,8 +14,8 @@ class RepStatusType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            
             ->add('comment', TextareaType::class)
+            ->add('status', StatusType::class)
         ;
     }
 

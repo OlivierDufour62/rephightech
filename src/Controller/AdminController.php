@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Entity\Client;
 use App\Entity\Employee;
 use App\Entity\Repair;
+use App\Entity\Repstatus;
 use App\Entity\Status;
 use App\Form\ClientType;
 use App\Form\EditTacheType;
+use App\Form\RepStatusType;
 use App\Form\TacheType;
 use App\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -36,7 +38,7 @@ class AdminController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $allEmployee = $entityManager->getRepository(Employee::class)
-                            ->findAll();
+            ->findAll();
         return $this->render('admin/employee.html.twig', [
             'allEmployee' => $allEmployee,
         ]);
@@ -59,9 +61,9 @@ class AdminController extends AbstractController
      */
     public function intervention()
     {
+        
         $entityManager = $this->getDoctrine()->getManager();
         $allRepair = $entityManager->getRepository(Repair::class)->findAll();
-        // $allRepair->get
         return $this->render('admin/intervention.html.twig', [
             'allrepair' => $allRepair
         ]);
@@ -91,8 +93,6 @@ class AdminController extends AbstractController
      */
     public function addTache(Request $request, FileUploader $fileUploader)
     {
-        $status = new Status();
-        
         $repair = new Repair();
         $form = $this->createForm(TacheType::class, $repair);
         $form->handleRequest($request);
@@ -103,9 +103,7 @@ class AdminController extends AbstractController
                 $imageFileName = $fileUploader->upload($image);
                 $repair->setImage($imageFileName);
             }
-            
             $entityManager = $this->getDoctrine()->getManager();
-            $status->setName('En attente');
             $entityManager->persist($repair);
             $entityManager->flush();
             return new JsonResponse(true);
@@ -156,11 +154,12 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/editintervention/{id}", name="admin_editintervention")
      */
-    public function editIntervention(Request $request, Repair $repair,FileUploader $fileUploader)
+    public function editIntervention(Request $request, Repair $repair, FileUploader $fileUploader)
     {
-        // $entityManager = $this->getDoctrine()->getManager();
-        // $repair = $entityManager->getRepository(Repair::class)
-        //                         ->find($id);
+        $idrepair = $request->query->get('rep');
+        $entityManager = $this->getDoctrine()->getManager();
+        $comment = $entityManager->getRepository(Repstatus::class)
+                                ->findBy(['id' => $idrepair]);
         $formRepair = $this->createForm(EditTacheType::class, $repair);
         $formRepair->handleRequest($request);
         if ($formRepair->isSubmitted() && $formRepair->isValid()) {
@@ -173,10 +172,10 @@ class AdminController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($repair);
             $entityManager->flush();
-            //return new JsonResponse(true);
+            return new JsonResponse(true);
         }
         return $this->render('admin/edit_intervention.html.twig', [
-            'repair' => $repair, 'formrepair' => $formRepair->createView()
+            'repair' => $repair, 'comment' => $comment, 'formrepair' => $formRepair->createView()
         ]);
     }
 
@@ -209,8 +208,8 @@ class AdminController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $customer = $entityManager->getRepository(Client::class)
-                                ->find($id);
-        if(!$customer){
+            ->find($id);
+        if (!$customer) {
             return new JsonResponse(false);
         }
         $customer->setIsActive(!$customer->getIsActive());
@@ -227,8 +226,8 @@ class AdminController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $customer = $entityManager->getRepository(Employee::class)
-                                ->find($id);
-        if(!$customer){
+            ->find($id);
+        if (!$customer) {
             return new JsonResponse(false);
         }
         $customer->setIsActive(!$customer->getIsActive());
@@ -245,13 +244,39 @@ class AdminController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $customer = $entityManager->getRepository(Repair::class)
-                                ->find($id);
-        if(!$customer){
+            ->find($id);
+        if (!$customer) {
             return new JsonResponse(false);
         }
         $customer->setIsActive(!$customer->getIsActive());
         $entityManager->persist($customer);
         $entityManager->flush();
         return new JsonResponse(true);
+    }
+
+
+    /**
+     * @Route("/admin/details/{id}", name="details_repair")
+     */
+
+    public function detailsRepair(Request $request, $id)
+    {
+        
+        $entityRepair = $this->getDoctrine()->getManager();
+        $repair = $entityRepair->getRepository(Repair::class)
+                                ->find($id);
+        $comment = new Repstatus();
+        $formComment = $this->createForm(RepStatusType::class, $comment);
+        $formComment->handleRequest($request);
+        $comment->setRep($repair);
+        if ($formComment->isSubmitted() && $formComment->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($comment);
+            $entityManager->flush();
+            return new JsonResponse(true);
+        }
+        return $this->render('admin/detailsrepair.html.twig', ['repair' => $repair,
+            'comment' => $comment, 'formcomment' => $formComment->createView(),
+        ]);
     }
 }

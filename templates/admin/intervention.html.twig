@@ -21,15 +21,15 @@
 				</thead>
 				<tbody>
 				{% for repair in allrepair %}
-				{{dump(repair)}}
+				
 					<tr>
 						<th scope="row"> {{repair.id}} </th>
 						<td>{{repair.client.lastname}}</td>
 						<td>{{repair.dateSupported|date('d-m-Y') }}</td>
 						<td>{{repair.dateEnd|date('d-m-Y') }}</td>
-						<td>.</td>
+						<td>{{repair.status.name}}</td>
 						<td>
-							<a href="/admin/editintervention/{{repair.id}}">
+							<a href="/admin/details/{{repair.id}}">
 								<i class="icofont-arrow-right text-white"></a>
 							</i>
 						</td>

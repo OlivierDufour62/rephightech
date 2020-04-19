@@ -13,3 +13,11 @@
 .bord{
     border: none !important;
 }
+
+.f-size-ref {
+    font-size: 1.5rem;
+}
+
+.f-size {
+    font-size: 1.3rem;
+}

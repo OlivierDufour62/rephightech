@@ -15,9 +15,9 @@ class StatusType extends AbstractType
         $builder
         ->add('name', ChoiceType::class, [
             'choices'  => [
-                'En attente' => 'en attente',
-                'En cours' => 'en cours',
-                'Terminée' => 'terminée',
+                'en attente' => 'En attente',
+                'en cours' => 'En cours',
+                'terminée' => 'Terminée',
             ],
         ])
         ;

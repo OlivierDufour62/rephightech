@@ -11,9 +11,10 @@
 {% endblock %}
 {% block content %}
 
-<div class="col-6 mx-auto bg text-white successsend d-none bg-success">
-			<p>Réparation enregistrer</p>
-		</div>
+	
+		<div class="col-6 mx-auto bg text-white successsend d-none bg-success">
+				<p>Réparation enregistrer</p>
+			</div>
 	{# <form class="col-10 d-flex mt-5"> #}
 	{{ form_start(form, {'attr': {'class': 'col-10 d-flex mt-5 ajaxaddtache'}})}}
 
@@ -23,6 +24,7 @@
 				<div class="col">
 					<label for="">Date de prise en charge</label>
 					{{ form_widget(form.dateSupported, {'attr': {'class': 'form-control'}})}}
+					{{ form_widget(form.status.name, {'attr': {'class': 'form-control d-none'}})}}
 					{# <input type="date" class="form-control"> #}
 				</div>
 				<div class="col">

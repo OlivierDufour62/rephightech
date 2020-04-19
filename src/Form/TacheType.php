@@ -31,6 +31,7 @@ class TacheType extends AbstractType
             ]])
             ->add('description', TextareaType::class)
             ->add('client', ClientType::class)
+            ->add('status', StatusType::class)
         ;
     }
 
