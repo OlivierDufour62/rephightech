@@ -6,11 +6,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\EmployeeRepository")
  */
-class Employee
+class Employee implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -39,7 +40,7 @@ class Employee
      */
     private $email;
 
-   /**
+    /**
     * @var \DateTime $date_create
     *
     * @Gedmo\Timestampable(on="create")
@@ -80,6 +81,11 @@ class Employee
      * @ORM\Column(type="boolean", options={"default": true})
      */
     private $isActive;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $password;
 
     public function __construct()
     {
@@ -252,5 +258,41 @@ class Employee
         $this->isActive = $isActive;
 
         return $this;
+    }
+
+    public function getRoles(): array
+    {
+        $roles = [];
+        $roles[] = $this->rol;
+        $roles[] = 'ROLE_USER';
+        return array_unique($roles);
+    }
+
+    public function getSalt()
+    {
+        // you may need a real salt depending on your encoder
+        // see section on salt below
+        return null;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function getUsername()
+    {
+        return $this->email;
+    }
+    
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    public function eraseCredentials()
+    {
     }
 }

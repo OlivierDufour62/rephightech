@@ -18,6 +18,7 @@ class UserType extends AbstractType
             ->add('firstname', TextType::class)
             ->add('phonenumber', TextType::class)
             ->add('email', TextType::class)
+            ->add('password', TextType::class)
             ->add('genre', ChoiceType::class ,['expanded'=>true,'choices' => [
                 'Monsieur' => true,
                 'Madame' => false

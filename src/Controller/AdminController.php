@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\FileUploader;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AdminController extends AbstractController
 {
@@ -72,12 +72,14 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/addemployee", name="admin_addemployee")
      */
-    public function addEmployee(Request $request)
+    public function addEmployee(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
         $employee = new Employee();
         $form = $this->createForm(UserType::class, $employee);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $password = $passwordEncoder->encodePassword($employee, $employee->getPassword());
+            $employee->setPassword($password);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($employee);
             $entityManager->flush();

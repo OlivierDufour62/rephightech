@@ -197,4 +197,55 @@ $(document).ready(function () {
             }
         });
     });
+
+    $('#addtache').on('click', function (e) {
+        e.preventDefault();
+        let data = {};
+        let data2 = new FormData($('.ajaxaddtache')[0]);
+        $("ajaxaddtache")
+            .serializeArray()
+            .forEach((object) => {
+                data[object.name] = object.value
+            });
+        $.ajax({
+            type: 'POST',
+            url: `/addtache`,
+            data: data2,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                console.log(data == true)
+                if (data === true) {
+                    $(".successsend").removeClass("d-none");
+                    setTimeout(function () {
+                        $(".successsend").addClass("d-none");
+                    }, 1500);
+                }
+            }
+        });
+    });
+
+    $('.addcomment').on('click', function (e) {
+        e.preventDefault();
+        let data = {};
+        const id = $('.ajaxcomment').attr('repairid');
+        $('.ajaxcomment')
+            .serializeArray()
+            .forEach((object) => {
+                data[object.name] = object.value
+            });
+        $.ajax({
+            type: 'POST',
+            url: `/details/${id}`,
+            data: data,
+            success: function (data) {
+                if (data === true) {
+                    $(".successsend").removeClass("d-none");
+                    setTimeout(function () {
+                        $(".successsend").addClass("d-none");
+                    }, 1500);
+                }
+            }
+        });
+    });
 });

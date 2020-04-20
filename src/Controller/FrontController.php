@@ -4,6 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Client;
 use App\Entity\Repair;
+use App\Entity\Repstatus;
+use App\Form\EditTacheType;
+use App\Form\RepStatusType;
 use App\Form\TacheType;
 use App\Service\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,26 +14,61 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class FrontController extends AbstractController
 {
+    
     /**
-     * @Route("/front", name="front")
+     * @Route("/login", name="app_login")
      */
-    public function connect()
+    public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        return $this->render('front/connection.html.twig', [
-            'controller_name' => 'FrontController',
-        ]);
+        if ($this->getUser()) {
+            return $this->redirectToRoute('/uptache');
+        }
+        // get the login error if there is one
+        $error = $authenticationUtils->getLastAuthenticationError();
+        // last username entered by the user
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+        return $this->render('front/connection.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
     /**
-     * @Route("/detailrepair", name="repair")
+     * @Route("/logout", name="app_logout")
      */
-    public function detailsRepair()
+    public function logout()
     {
-        return $this->render('front/details_repair.html.twig', [
-            'controller_name' => 'FrontController',
+        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+    }
+
+    /**
+     * @Route("/editrepair/{id}", name="editrepair")
+     */
+    public function editRepair(Request $request, Repair $repair, FileUploader $fileUploader)
+    {
+        $idrepair = $repair->getId();
+        $entityManager = $this->getDoctrine()->getManager();
+        $comment = $entityManager->getRepository(Repstatus::class)
+                                ->findBy(['rep' => $idrepair]);
+        $formRepair = $this->createForm(EditTacheType::class, $repair);
+        $formRepair->handleRequest($request);
+        if ($formRepair->isSubmitted() && $formRepair->isValid()) {
+            /** @var UploadedFile $image */
+            $image = $formRepair['image']->getData();
+            if ($image) {
+                $imageFileName = $fileUploader->upload($image);
+                $repair->setImage($imageFileName);
+            }
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($repair);
+            $entityManager->flush();
+            //return new JsonResponse(true);
+        }
+        return $this->render('front/edit_repair.html.twig', [
+            'repair' => $repair, 'comment' => $comment, 'formrepair' => $formRepair->createView()
         ]);
     }
 
@@ -52,7 +90,7 @@ class FrontController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($repair);
             $entityManager->flush();
-            // return new JsonResponse(true);
+            return new JsonResponse(true);
         }
         
         return $this->render('front/add_tache.html.twig', [
@@ -87,6 +125,31 @@ class FrontController extends AbstractController
                                 ->findAll();
         return $this->render('front/tache_up.html.twig', [
             'allrepair' => $allRepair
+        ]);
+    }
+
+    /**
+     * @Route("/details/{id}", name="details_repair")
+     */
+
+    public function detailsRepair(Request $request, Repair $repair)
+    {
+        $idrepair = $repair->getId();
+        $entityManager = $this->getDoctrine()->getManager();
+        $comment = $entityManager->getRepository(Repstatus::class)
+                                ->findBy(['rep' => $idrepair]);
+        $commentForm = new Repstatus();
+        $formComment = $this->createForm(RepStatusType::class, $commentForm);
+        $formComment->handleRequest($request);
+        $commentForm->setRep($repair);
+        if ($formComment->isSubmitted() && $formComment->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($commentForm);
+            $entityManager->flush();
+            return new JsonResponse(true);
+        }
+        return $this->render('front/detailsrepair.html.twig', ['repair' => $repair,
+            'commentform' => $commentForm, 'formcomment' => $formComment->createView(),'comment' => $comment
         ]);
     }
 }
