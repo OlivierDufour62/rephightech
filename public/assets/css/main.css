@@ -21,3 +21,41 @@
 .f-size {
     font-size: 1.3rem;
 }
+
+.hamb1 {
+    height: 5px;
+    width: 40px;
+}
+
+@media screen and (max-width: 576px) {
+
+    .h-size{
+        font-size: 1.2rem;
+    }
+
+    .d-size{
+        font-size: 1rem;
+    }
+
+    .header-size {
+        width: 100% !important;
+    }
+    
+    .menu {
+        display: none;
+        width: 75% !important;
+        position: absolute;
+        top: 100px;
+        left: 0;
+        background-color: black;
+        z-index: 1000;
+    }
+}
+
+@media screen and (max-width: 768px) {
+
+    .header-size {
+        width: 100% !important;
+    }
+}
+

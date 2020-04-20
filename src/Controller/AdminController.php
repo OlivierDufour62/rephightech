@@ -156,12 +156,13 @@ class AdminController extends AbstractController
      */
     public function editIntervention(Request $request, Repair $repair, FileUploader $fileUploader)
     {
-        $idrepair = $request->query->get('rep');
+        $idrepair = $repair->getId();
         $entityManager = $this->getDoctrine()->getManager();
         $comment = $entityManager->getRepository(Repstatus::class)
-                                ->findBy(['id' => $idrepair]);
+                                ->findBy(['rep' => $idrepair]);
         $formRepair = $this->createForm(EditTacheType::class, $repair);
         $formRepair->handleRequest($request);
+        // dd($idrepair);
         if ($formRepair->isSubmitted() && $formRepair->isValid()) {
             /** @var UploadedFile $image */
             $image = $formRepair['image']->getData();
@@ -172,7 +173,7 @@ class AdminController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($repair);
             $entityManager->flush();
-            return new JsonResponse(true);
+            //return new JsonResponse(true);
         }
         return $this->render('admin/edit_intervention.html.twig', [
             'repair' => $repair, 'comment' => $comment, 'formrepair' => $formRepair->createView()
@@ -259,24 +260,24 @@ class AdminController extends AbstractController
      * @Route("/admin/details/{id}", name="details_repair")
      */
 
-    public function detailsRepair(Request $request, $id)
+    public function detailsRepair(Request $request, Repair $repair)
     {
-        
-        $entityRepair = $this->getDoctrine()->getManager();
-        $repair = $entityRepair->getRepository(Repair::class)
-                                ->find($id);
-        $comment = new Repstatus();
-        $formComment = $this->createForm(RepStatusType::class, $comment);
+        $idrepair = $repair->getId();
+        $entityManager = $this->getDoctrine()->getManager();
+        $comment = $entityManager->getRepository(Repstatus::class)
+                                ->findBy(['rep' => $idrepair]);
+        $commentForm = new Repstatus();
+        $formComment = $this->createForm(RepStatusType::class, $commentForm);
         $formComment->handleRequest($request);
-        $comment->setRep($repair);
+        $commentForm->setRep($repair);
         if ($formComment->isSubmitted() && $formComment->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($comment);
+            $entityManager->persist($commentForm);
             $entityManager->flush();
             return new JsonResponse(true);
         }
         return $this->render('admin/detailsrepair.html.twig', ['repair' => $repair,
-            'comment' => $comment, 'formcomment' => $formComment->createView(),
+            'commentform' => $commentForm, 'formcomment' => $formComment->createView(),'comment' => $comment
         ]);
     }
 }
