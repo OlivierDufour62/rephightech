@@ -108,7 +108,18 @@ class AdminController extends AbstractController
                 $imageFileName = $fileUploader->upload($image);
                 $repair->setImage($imageFileName);
             }
+            $email = $repair->getClient()->getEmail();
             $entityManager = $this->getDoctrine()->getManager();
+            $customer = $entityManager->getRepository(Client::class)
+                ->findBy(['email' => $email])[0] ?? null;
+            if ($customer !== null) {
+                $tmpClient = $repair->getClient();
+                $customer->setLastName($tmpClient->getLastname());
+                $customer->setFirstName($tmpClient->getFirstname());
+                $customer->setPhoneNumber($tmpClient->getPhoneNumber());
+                $customer->setGenre($tmpClient->getGenre());
+                $repair->setClient($customer);
+            }
             $entityManager->persist($repair);
             $entityManager->flush();
             return new JsonResponse(true);
@@ -131,12 +142,13 @@ class AdminController extends AbstractController
             if ($customer == null) {
                 $customer = new Client();
                 $customer->setEmail($email)
-                        ->setFirstname('')
-                        ->setLastname('')
-                        ->setPhoneNumber('')
-                        ->setGenre('');
-            } 
-                $client = ['id'=> $customer->getId(), 'lastname' => $customer->getLastname(), 'firstname' => $customer->getFirstname(), 'email' => $customer->getEmail(), 'phonenumber' => $customer->getPhoneNumber(), 'genre' => $customer->getGenre()];
+                    ->setFirstname('')
+                    ->setLastname('')
+                    ->setPhoneNumber('')
+                    ->setGenre('');
+            }
+            $client = ['id' => $customer->getId(), 'lastname' => $customer->getLastname(), 'firstname' => $customer->getFirstname(), 'email' => $customer->getEmail(), 'phonenumber' => $customer->getPhoneNumber(), 'genre' => $customer->getGenre()];
+
             return new JsonResponse($client);
         } else {
             return new JsonResponse(false);

@@ -11,10 +11,10 @@
 {% endblock %}
 {% block content %}
 
-	
-		<div class="col-6 mx-auto bg text-white successsend d-none bg-success">
-				<p>Réparation enregistrer</p>
-			</div>
+
+	<div class="col-6 mx-auto bg text-white successsend d-none bg-success">
+		<p>Réparation enregistrer</p>
+	</div>
 	{{ form_start(form, {'attr': {'class': 'col-10 col-lg-10 d-flex mt-5 ajaxaddtache'}})}}
 	<div class="w-100 d-lg-flex justify-content-lg-around col-10 mx-auto">
 		<div class="col-12 col-lg-5">
@@ -48,31 +48,31 @@
 			</div>
 			<div class="col-12 mt-5 p-0">
 				<div class="mt-4">
-					<div class="form-check">
+					
+						<div class="form-check">
 							{% for genre in form.client.genre %}
 								{{ form_row(genre, {'attr': {'class':'d-inline-flex flex-column-reverse'}}) }}
 							{% endfor %}
-					</div>
-					<div class="row p-0 mt-lg-4">
-						<div class="col col-12 col-lg-6">
-							{{ form_widget(form.client.lastname, {'attr': {'class': 'form-control', 'placeholder': 'Nom'}})}}
-							{{ form_widget(form.client.id)}}
 						</div>
-						<div class="col col-12 col-lg-6 mt-4 mt-lg-0">
-							{{ form_widget(form.client.firstname, {'attr': {'class': 'form-control', 'placeholder': 'Prénom'}})}}
+						<div class="row p-0 mt-lg-4">
+							<div class="col col-12 col-lg-6">
+								{{ form_widget(form.client.lastname, {'attr': {'class': 'form-control', 'placeholder': 'Nom'}})}}
+							</div>
+							<div class="col col-12 col-lg-6 mt-4 mt-lg-0">
+								{{ form_widget(form.client.firstname, {'attr': {'class': 'form-control', 'placeholder': 'Prénom'}})}}
+							</div>
 						</div>
-					</div>
-					<div class="row  mt-4">
-						<div class="col col-12 col-lg-6">
-							{{ form_widget(form.client.email, {'attr': {'class': 'form-control', 'placeholder': 'Email' }})}}
+						<div class="row  mt-4">
+							<div class="col col-12 col-lg-6">
+								{{ form_widget(form.client.email, {'attr': {'class': 'form-control', 'placeholder': 'Email' }})}}
+							</div>
+							<div class="col col-12 col-lg-6 mt-4 mt-lg-0">
+								{{ form_widget(form.client.phonenumber, {'attr': {'class': 'form-control', 'placeholder': 'Téléphone'}})}}
+							</div>
 						</div>
-						<div class="col col-12 col-lg-6 mt-4 mt-lg-0">
-							{{ form_widget(form.client.phonenumber, {'attr': {'class': 'form-control', 'placeholder': 'Téléphone'}})}}
+						<div class="mt-4 d-flex justify-content-end">
+							<button class="btn bg-black text-white my-2 my-sm-0 ml-3" id="addtache" type="submit">Enregistrer Réparation</button>
 						</div>
-					</div>
-					<div class="mt-4 d-flex justify-content-end">
-						<button class="btn bg-black text-white my-2 my-sm-0 ml-3" id="addtache" type="submit">Enregistrer Réparation</button>
-					</div>
 				</div>
 			</div>
 		</div>

@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RepairRepository")
@@ -21,16 +23,19 @@ class Repair
 
     /**
      * @ORM\Column(type="date")
+     * @Assert\Type("date")
      */
     private $dateSupported;
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @Assert\Type("date")
      */
     private $dateEnd;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Type("integer")
      */
     private $duration;
 

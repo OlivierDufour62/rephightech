@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\StatusRepository")
@@ -21,6 +23,7 @@ class Status
 
     /**
      * @ORM\Column(type="string", length=255, options={"default": "En attente"})
+     * @Assert\Type("string")
      */
     private $name;
 
