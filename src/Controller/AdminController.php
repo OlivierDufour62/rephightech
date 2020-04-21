@@ -95,7 +95,10 @@ class AdminController extends AbstractController
      */
     public function addTache(Request $request, FileUploader $fileUploader)
     {
+        $entityManager = $this->getDoctrine()->getManager();
+        $employee = $this->getUser();
         $repair = new Repair();
+        $repair->setEmp($employee);
         $form = $this->createForm(TacheType::class, $repair);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -104,6 +107,11 @@ class AdminController extends AbstractController
             if ($image) {
                 $imageFileName = $fileUploader->upload($image);
                 $repair->setImage($imageFileName);
+            }
+            $customer = new Client();
+            $id = $customer->getId();
+            if($id > 0){
+                $repair->setClient($id);
             }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($repair);

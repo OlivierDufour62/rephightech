@@ -14,7 +14,7 @@
 		<div class="col-12 text-center refclient">
 			<p class="f-size-ref">XXXXXXXXX</p>
 		</div>
-		{{ form_start(formcomment, {'attr' : {'class': 'ajaxcomment', 'repairid': repair.id}})}}
+		{{ form_start(formcomment, {'attr' : {'class': 'ajaxcommentfront', 'repairid': repair.id}})}}
 		<div class="col-8 col-lg-2 mx-auto mb-3">
 			{{ form_widget(formcomment.status.name, {'attr': {'class': 'form-control'}})}}
 		</div>
@@ -61,7 +61,7 @@
 			</div>
 			<div class="mt-4 d-flex justify-content-center">
 				<a class="btn bg-black text-white" href="/editrepair/{{repair.id}}">Éditer l'intervention</a>
-				<button class="btn bg-black text-white my-2 my-sm-0 ml-3 addcomment" id="" type="submit">Commenter</button>
+				<button class="btn bg-black text-white my-2 my-sm-0 ml-3 addcommentfront" id="" type="submit">Commenter</button>
 			</div>
 		</div>
 	</div>

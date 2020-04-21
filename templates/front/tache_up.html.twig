@@ -6,6 +6,13 @@
 {% endblock %}
 {% block content %}
 	<div class="col-9 mt-4">
+		<div class="mb-4 col-4 mx-auto">
+			<select name="filter" class="form-control" id="">
+				<option value="1">En attente</option>
+				<option value="2">En cours</option>
+				<option value="3">Terminée</option>
+			</select>
+		</div>
 		<div class="table-responsive">
 			<table class="table table-striped table-dark text-center">
 				<thead>
@@ -20,26 +27,28 @@
 					</tr>
 				</thead>
 				<tbody>
-				{% for repair in allrepair %}
-					<tr>
-						<th scope="row"> {{repair.id}} </th>
-						<td>{{repair.client.lastname}}</td>
-						<td>{{repair.dateSupported|date('d-m-Y') }}</td>
-						<td>{{repair.dateEnd|date('d-m-Y') }}</td>
-						<td>{{repair.status.name}}</td>
-						<td>
-							<a href="/details/{{repair.id}}">
-								<i class="icofont-arrow-right text-white"></a>
-							</i>
-						</td>
-						<td>
-							<div class="custom-control custom-switch">
-								<input type="checkbox" class="custom-control-input" repairswitches="{{repair.id}}" id="customSwitches{{repair.id}}"{% if repair.isActive %} checked {% endif %}>
-								<label class="custom-control-label" for="customSwitches{{repair.id}}"></label>
-							</div>
-						</td>
-					</tr>
-				{% endfor %}
+					{% for repair in allrepair %}
+						<tr>
+							<th scope="row">
+								{{repair.id}}
+							</th>
+							<td>{{repair.client.lastname}}</td>
+							<td>{{repair.dateSupported|date('d-m-Y') }}</td>
+							<td>{{repair.dateEnd|date('d-m-Y') }}</td>
+							<td>{{repair.status.name}}</td>
+							<td>
+								<a href="/details/{{repair.id}}">
+									<i class="icofont-arrow-right text-white"></a>
+								</i>
+							</td>
+							<td>
+								<div class="custom-control custom-switch">
+									<input type="checkbox" class="custom-control-input" repairswitches="{{repair.id}}" id="customSwitches{{repair.id}}" {% if repair.isActive %} checked {% endif %}>
+									<label class="custom-control-label" for="customSwitches{{repair.id}}"></label>
+								</div>
+							</td>
+						</tr>
+					{% endfor %}
 				</tbody>
 			</table>
 		</div>

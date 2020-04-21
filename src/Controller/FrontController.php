@@ -77,7 +77,10 @@ class FrontController extends AbstractController
      */
     public function addTache(Request $request, FileUploader $fileUploader)
     {
+        $entityManager = $this->getDoctrine()->getManager();
+        $employee = $this->getUser();
         $repair = new Repair();
+        $repair->setEmp($employee);
         $form = $this->createForm(TacheType::class, $repair);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

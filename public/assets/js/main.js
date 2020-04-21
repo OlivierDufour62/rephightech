@@ -198,11 +198,11 @@ $(document).ready(function () {
         });
     });
 
-    $('#addtache').on('click', function (e) {
+    $('#addtachefront').on('click', function (e) {
         e.preventDefault();
         let data = {};
-        let data2 = new FormData($('.ajaxaddtache')[0]);
-        $("ajaxaddtache")
+        let data2 = new FormData($('.ajaxaddtachefront')[0]);
+        $("ajaxaddtachefront")
             .serializeArray()
             .forEach((object) => {
                 data[object.name] = object.value
@@ -225,11 +225,11 @@ $(document).ready(function () {
         });
     });
 
-    $('.addcomment').on('click', function (e) {
+    $('.addcommentfront').on('click', function (e) {
         e.preventDefault();
         let data = {};
-        const id = $('.ajaxcomment').attr('repairid');
-        $('.ajaxcomment')
+        const id = $('.ajaxcommentfront').attr('repairid');
+        $('.ajaxcommentfront')
             .serializeArray()
             .forEach((object) => {
                 data[object.name] = object.value
@@ -248,4 +248,6 @@ $(document).ready(function () {
             }
         });
     });
+
+    
 });
