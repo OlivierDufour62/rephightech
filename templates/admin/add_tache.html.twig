@@ -41,7 +41,7 @@
 		</div>
 		<div class="col-12 col-lg-5">
 			<div class="row mx-auto">
-				<input class="form-control mr-sm-2 my-lg-2 col-6 col-lg-9 searchbar" name="email" type="text" placeholder="Email">
+				<input class="form-control mr-sm-2 mt-lg-4 col-6 col-lg-9 searchbar" name="email" type="text" placeholder="Email">
 				<div>
 					<a href="#" id="search" class="btn bg-black text-white my-lg-2 my-sm-0 ml-3">Valider</a>
 				</div>
@@ -56,6 +56,7 @@
 					<div class="row p-0 mt-lg-4">
 						<div class="col col-12 col-lg-6">
 							{{ form_widget(form.client.lastname, {'attr': {'class': 'form-control', 'placeholder': 'Nom'}})}}
+							{{ form_widget(form.client.id)}}
 						</div>
 						<div class="col col-12 col-lg-6 mt-4 mt-lg-0">
 							{{ form_widget(form.client.firstname, {'attr': {'class': 'form-control', 'placeholder': 'Prénom'}})}}

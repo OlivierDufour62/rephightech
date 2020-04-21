@@ -61,7 +61,7 @@ class AdminController extends AbstractController
      */
     public function intervention()
     {
-        
+
         $entityManager = $this->getDoctrine()->getManager();
         $allRepair = $entityManager->getRepository(Repair::class)->findAll();
         return $this->render('admin/intervention.html.twig', [
@@ -108,11 +108,6 @@ class AdminController extends AbstractController
                 $imageFileName = $fileUploader->upload($image);
                 $repair->setImage($imageFileName);
             }
-            $customer = new Client();
-            $id = $customer->getId();
-            if($id > 0){
-                $repair->setClient($id);
-            }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($repair);
             $entityManager->flush();
@@ -132,8 +127,16 @@ class AdminController extends AbstractController
             $email = $request->query->get('email');
             $entityManager = $this->getDoctrine()->getManager();
             $customer = $entityManager->getRepository(Client::class)
-                ->findBy(['email' => $email])[0];
-            $client = ['lastname' => $customer->getLastname(), 'firstname' => $customer->getFirstname(), 'email' => $customer->getEmail(), 'phonenumber' => $customer->getPhoneNumber(), 'genre' => $customer->getGenre()];
+                ->findBy(['email' => $email])[0] ?? null;
+            if ($customer == null) {
+                $customer = new Client();
+                $customer->setEmail($email)
+                        ->setFirstname('')
+                        ->setLastname('')
+                        ->setPhoneNumber('')
+                        ->setGenre('');
+            } 
+                $client = ['id'=> $customer->getId(), 'lastname' => $customer->getLastname(), 'firstname' => $customer->getFirstname(), 'email' => $customer->getEmail(), 'phonenumber' => $customer->getPhoneNumber(), 'genre' => $customer->getGenre()];
             return new JsonResponse($client);
         } else {
             return new JsonResponse(false);
@@ -169,7 +172,7 @@ class AdminController extends AbstractController
         $idrepair = $repair->getId();
         $entityManager = $this->getDoctrine()->getManager();
         $comment = $entityManager->getRepository(Repstatus::class)
-                                ->findBy(['rep' => $idrepair]);
+            ->findBy(['rep' => $idrepair]);
         $formRepair = $this->createForm(EditTacheType::class, $repair);
         $formRepair->handleRequest($request);
         // dd($idrepair);
@@ -275,7 +278,7 @@ class AdminController extends AbstractController
         $idrepair = $repair->getId();
         $entityManager = $this->getDoctrine()->getManager();
         $comment = $entityManager->getRepository(Repstatus::class)
-                                ->findBy(['rep' => $idrepair]);
+            ->findBy(['rep' => $idrepair]);
         $commentForm = new Repstatus();
         $formComment = $this->createForm(RepStatusType::class, $commentForm);
         $formComment->handleRequest($request);
@@ -286,8 +289,9 @@ class AdminController extends AbstractController
             $entityManager->flush();
             return new JsonResponse(true);
         }
-        return $this->render('admin/detailsrepair.html.twig', ['repair' => $repair,
-            'commentform' => $commentForm, 'formcomment' => $formComment->createView(),'comment' => $comment
+        return $this->render('admin/detailsrepair.html.twig', [
+            'repair' => $repair,
+            'commentform' => $commentForm, 'formcomment' => $formComment->createView(), 'comment' => $comment
         ]);
     }
 }
