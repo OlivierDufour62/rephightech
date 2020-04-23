@@ -1,54 +1,72 @@
 {% extends 'admin/base.html.twig' %}
-
-{# {% form_theme form _self %}
-{%- block radio_widget -%}
-<input type="radio" name="{{ fullname }}" id="radio{{ value }}" value="{{ value }}" {% if checked %} checked="checked"{% endif %} />
-{%- endblock radio_widget -%} #}
-
 {% block title %}add tache
 {% endblock %}
 {% block h2 %}Ajouter une tâche
 {% endblock %}
 {% block content %}
 
-
-	<div class="col-6 mx-auto bg text-white successsend d-none bg-success">
-		<p>Réparation enregistrer</p>
-	</div>
-	{{ form_start(form, {'attr': {'class': 'col-10 col-lg-10 d-flex mt-5 ajaxaddtache'}})}}
-	<div class="w-100 d-lg-flex justify-content-lg-around col-10 mx-auto">
-		<div class="col-12 col-lg-5">
-			<div class="row">
-				<div class="col col-12 col-lg-6">
-					<label for="">Date de prise en charge</label>
-					{{ form_widget(form.dateSupported, {'attr': {'class': 'form-control'}})}}
-					{{ form_widget(form.status.name, {'attr': {'class': 'form-control d-none'}})}}
-				</div>
-				<div class="col col-12 col-lg-6">
-					<label for="">Date de fin estimée</label>
-					{{ form_widget(form.dateEnd, {'attr': {'class': 'form-control'}})}}
-				</div>
-			</div>
-			<div class="col mx-auto mt-4 col-12 col-lg-12 p-0">
-				{{ form_widget(form.duration, {'attr': {'class': 'form-control p-0','placeholder':'Durée estimée'}})}}
-			</div>
-			<div class="form-group col-12 col-lg-12 p-0">
-				{{ form_widget(form.description, {'attr': {'class': 'form-control resize mt-4','placeholder':'Description', 'rows':'5'}})}}
-			</div>
-			<div class="form-group">
-				{{ form_widget(form.image, {'attr': {'class': 'form-control-file'}})}}
-			</div>
+	<div class="col-10 col-lg-10">
+		<div class="col-12 mx-auto bg text-white d-none successsend bg-success">
+			<p>Réparation enregistrer</p>
 		</div>
-		<div class="col-12 col-lg-5">
-			<div class="row mx-auto">
-				<input class="form-control mr-sm-2 mt-lg-4 col-6 col-lg-9 searchbar" name="email" type="text" placeholder="Email">
-				<div>
-					<a href="#" id="search" class="btn bg-black text-white my-lg-2 my-sm-0 ml-3">Valider</a>
+		{{ form_start(form, {'attr': {'class': 'col-12 col-lg-12 d-flex mt-5 ajaxaddtache'}})}}
+		<div class="w-100 d-lg-flex justify-content-lg-around col-10 mx-auto">
+			<div class="col-12 col-lg-5">
+				<div class="row">
+					<div class="col col-12 col-lg-6">
+						<label for="">Date de prise en charge</label>
+						{{ form_widget(form.dateSupported, {'attr': {'class': 'form-control js-datepicker'}})}}
+						{{ form_widget(form.status.name, {'attr': {'class': 'form-control d-none'}})}}
+					</div>
+					<div class="col col-12 col-lg-6">
+						<label for="">Date de fin estimée</label>
+						{{ form_widget(form.dateEnd, {'attr': {'class': 'form-control js-datepicker'}})}}
+					</div>
+				</div>
+				<div class="col mx-auto mt-4 col-12 col-lg-12 p-0">
+					{{ form_widget(form.duration, {'attr': {'class': 'form-control p-0','placeholder':'Durée estimée'}})}}
+				</div>
+				<div class="col mx-auto mt-4 col-12 col-lg-12 p-0">
+					{{ form_widget(form.device.type, {'attr': {'class': 'form-control p-0','placeholder':'Type'}})}}
+				</div>
+				<div class="row p-0 mt-lg-4">
+					<div class="col col-12 col-lg-6">
+						{{ form_widget(form.device.refDevice, {'attr': {'class': 'form-control p-0','placeholder':'Référence Contructeur'}})}}
+					</div>
+					<div class="col col-12 col-lg-6">
+						{{ form_widget(form.device.mark, {'attr': {'class': 'form-control p-0','placeholder':'Marque'}})}}
+					</div>
+				</div>
+				<div class="row p-0 mt-lg-4 col-12">
+					<div class="form-check col-md-6">
+							<label for="">Garantie</label>
+							{% for garantie in form.device.guarantee %}
+								{{ form_row(garantie, {'attr': {'class':'d-inline-flex'}}) }}
+							{% endfor %}
+					</div>
+					<div class="form-check col-md-6">
+							<label for="">Montage Perso</label>
+							{% for besame in form.device.beSame %}
+								{{ form_row(besame, {'attr': {'class':'d-inline-flex flex-column-reverse'}}) }}
+							{% endfor %}
+					</div>
+				</div>
+				<div class="form-group col-12 col-lg-12 p-0">
+					{{ form_widget(form.description, {'attr': {'class': 'form-control resize mt-4','placeholder':'Description', 'rows':'5'}})}}
+				</div>
+				<div class="form-group">
+					{{ form_widget(form.image, {'attr': {'class': 'form-control-file'}})}}
 				</div>
 			</div>
-			<div class="col-12 mt-5 p-0">
-				<div class="mt-4">
-					
+			<div class="col-12 col-lg-5 mt-2">
+				<div class="row mx-auto">
+					<input class="form-control mr-sm-2 mt-lg-4 col-6 col-lg-9 searchbar" name="email" type="text" placeholder="Email">
+					<div>
+						<a href="#" id="search" class="btn mt-lg-4 bg-black text-white my-lg-2 my-sm-0 ml-3">Valider</a>
+					</div>
+				</div>
+				<div class="col-12 mt-4 p-0">
+					<div class="mt-4">
 						<div class="form-check">
 							{% for genre in form.client.genre %}
 								{{ form_row(genre, {'attr': {'class':'d-inline-flex flex-column-reverse'}}) }}
@@ -73,8 +91,9 @@
 						<div class="mt-4 d-flex justify-content-end">
 							<button class="btn bg-black text-white my-2 my-sm-0 ml-3" id="addtache" type="submit">Enregistrer Réparation</button>
 						</div>
+					</div>
 				</div>
 			</div>
+			{{ form_end(form) }}
 		</div>
-		{{ form_end(form) }}
 	{% endblock %}

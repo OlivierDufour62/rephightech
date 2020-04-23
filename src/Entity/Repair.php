@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 
 /**
@@ -23,13 +24,11 @@ class Repair
 
     /**
      * @ORM\Column(type="date")
-     * @Assert\Type("date")
      */
     private $dateSupported;
 
     /**
      * @ORM\Column(type="date", nullable=true)
-     * @Assert\Type("date")
      */
     private $dateEnd;
 
@@ -67,6 +66,7 @@ class Repair
 
     /**
      * @ORM\Column(type="string", length=1000)
+     * @Groups({"group1"})
      */
     private $description;
 
@@ -83,6 +83,7 @@ class Repair
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Repstatus", mappedBy="rep", orphanRemoval=true)
+     * @Groups({"group1"})
      */
     private $repstatuses;
 
@@ -95,10 +96,23 @@ class Repair
      * @ORM\ManyToOne(targetEntity="App\Entity\Status", inversedBy="rep", cascade={"persist"})
      */
     private $status;
+
+    /**
+     * @ORM\Column(type="string", length=150)
+     * @Groups({"group1"})
+     */
+    private $reference;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Device", inversedBy="rep", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $device;
     
 
     public function __construct()
     {
+        $this->setReference(time());
         $this->setIsActive(true);
         $this->setDateCreate(new \DateTime('now'));
         $this->date_update = new \DateTime();
@@ -281,6 +295,30 @@ class Repair
     public function setStatus(?Status $status): self
     {
         $this->status = $status;
+        return $this;
+    }
+
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    public function setReference(string $reference): self
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+    public function getDevice(): ?Device
+    {
+        return $this->device;
+    }
+
+    public function setDevice(?Device $device): self
+    {
+        $this->device = $device;
+
         return $this;
     }
 

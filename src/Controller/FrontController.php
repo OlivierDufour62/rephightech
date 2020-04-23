@@ -151,7 +151,7 @@ class FrontController extends AbstractController
     }
 
     /**
-     * @Route("/details/{id}", name="details_repair")
+     * @Route("/details/{id}", name="front_details_repair")
      */
 
     public function detailsRepair(Request $request, Repair $repair)

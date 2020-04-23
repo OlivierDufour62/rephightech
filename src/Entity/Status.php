@@ -60,7 +60,6 @@ class Status
 
     public function __construct()
     {
-        $this->setName('En attente');
         $this->setDateCreate(new \DateTime('now'));
         $this->date_update = new \DateTime();
         $this->rep = new ArrayCollection();

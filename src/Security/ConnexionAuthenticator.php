@@ -77,7 +77,11 @@ class ConnexionAuthenticator extends AbstractFormLoginAuthenticator
     {
         // Check the user's password or other credentials and return true or false
         // If there are no credentials to check, you can just return true
-        return true;
+        $passwordhash = password_verify($credentials['password'], $user->getPassword());
+        if($passwordhash){
+            return true;
+        };
+        return false;
         // throw new \Exception('TODO: check the credentials inside '.__FILE__);
     }
 

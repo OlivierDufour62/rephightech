@@ -19,8 +19,14 @@ class TacheType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('dateSupported', DateType::class)
-            ->add('dateEnd', DateType::class)
+            ->add('dateSupported', DateType::class,[
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd',
+            ])
+            ->add('dateEnd', DateType::class,[
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd',
+            ])
             ->add('duration', TextType::class)
             ->add('image', FileType::class,  ['constraints' => [
                 new File([
@@ -34,6 +40,7 @@ class TacheType extends AbstractType
             ->add('description', TextareaType::class)
             ->add('client', ClientType::class)
             ->add('status', StatusType::class)
+            ->add('device', DeviceType::class)
         ;
     }
 

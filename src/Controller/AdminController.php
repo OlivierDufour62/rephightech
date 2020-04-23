@@ -6,7 +6,6 @@ use App\Entity\Client;
 use App\Entity\Employee;
 use App\Entity\Repair;
 use App\Entity\Repstatus;
-use App\Entity\Status;
 use App\Form\ClientType;
 use App\Form\EditTacheType;
 use App\Form\RepStatusType;
@@ -22,6 +21,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AdminController extends AbstractController
 {
+
     /**
      * @Route("/admin", name="admin_index")
      */
@@ -95,12 +95,14 @@ class AdminController extends AbstractController
      */
     public function addTache(Request $request, FileUploader $fileUploader)
     {
+        
         $entityManager = $this->getDoctrine()->getManager();
         $employee = $this->getUser();
         $repair = new Repair();
         $repair->setEmp($employee);
         $form = $this->createForm(TacheType::class, $repair);
         $form->handleRequest($request);
+        $errors = $form->getErrors();
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var UploadedFile $image */
             $image = $form['image']->getData();
@@ -124,7 +126,7 @@ class AdminController extends AbstractController
             $entityManager->flush();
             return new JsonResponse(true);
         }
-        return $this->render('admin/add_tache.html.twig', [
+        return $this->render('admin/add_tache.html.twig', [ 'error' => $errors,
             'form' => $form->createView()
         ]);
     }
@@ -187,6 +189,7 @@ class AdminController extends AbstractController
             ->findBy(['rep' => $idrepair]);
         $formRepair = $this->createForm(EditTacheType::class, $repair);
         $formRepair->handleRequest($request);
+        
         // dd($idrepair);
         if ($formRepair->isSubmitted() && $formRepair->isValid()) {
             /** @var UploadedFile $image */
@@ -280,11 +283,9 @@ class AdminController extends AbstractController
         return new JsonResponse(true);
     }
 
-
     /**
      * @Route("/admin/details/{id}", name="details_repair")
      */
-
     public function detailsRepair(Request $request, Repair $repair)
     {
         $idrepair = $repair->getId();

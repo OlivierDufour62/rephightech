@@ -5,6 +5,8 @@ namespace App\Entity;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RepstatusRepository")
@@ -21,6 +23,7 @@ class Repstatus
     /**
      * @ORM\Column(type="string", length=1000, nullable=true)
      * @Assert\Type("string")
+     * @Groups({"group1"})
      */
     private $comment;
 
