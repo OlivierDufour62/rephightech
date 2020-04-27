@@ -6,11 +6,13 @@ namespace App\Controller;
 use App\Entity\Device;
 use App\Entity\Repair;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ApiController extends AbstractController
 {
+    
     /**
      * @Route("/api/device/{id}", name="api_device")
      */
@@ -26,8 +28,8 @@ class ApiController extends AbstractController
      */
     public function getRepair(Repair $repair)
     {
-        $response = new Response($this->get('serializer')->serialize($repair, 'json', ['groups' => 'group1']));
-        $response->headers->set('Content-Type', 'application/json');
+        $json = $this->get('serializer')->serialize($repair, 'json', ['groups' => 'group1']);
+        $response = new JsonResponse($json, 200, [], true);
         return $response;
     }
 }

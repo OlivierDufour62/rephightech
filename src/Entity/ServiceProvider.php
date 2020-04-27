@@ -54,6 +54,11 @@ class ServiceProvider
      * @ORM\JoinColumn(nullable=false)
      */
     private $repairDevice;
+    
+    /**
+     * @ORM\Column(type="string", unique=true, length=255)
+     */
+    private $apiToken;
 
     public function __construct()
     {
@@ -134,6 +139,18 @@ class ServiceProvider
     public function setRepairProvider(?RepairDevice $repairDevice): self
     {
         $this->repairDevice = $repairDevice;
+
+        return $this;
+    }
+
+    public function getApiToken(): ?string
+    {
+        return $this->apiToken;
+    }
+
+    public function setApiToken(string $apiToken): self
+    {
+        $this->apiToken = $apiToken;
 
         return $this;
     }

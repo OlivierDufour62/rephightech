@@ -2,9 +2,8 @@
 
 $(document).ready(function () {
 
-    $('.js-datepicker').datepicker({
-        format: 'yyyy-mm-dd'
-    });
+    
+    
 
     $(".hamb").click(function () {
         $(".menu").toggle();
@@ -97,7 +96,6 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function (data) {
-                console.log(data)
                     $(".successsend").removeClass("d-none");
                     setTimeout(function () {
                         $(".successsend").addClass("d-none");
@@ -252,5 +250,9 @@ $(document).ready(function () {
                 }
             }
         });
+    });
+
+    $('.js-datepicker').datepicker({
+        dateFormat: 'yy-mm-dd'
     });
 });

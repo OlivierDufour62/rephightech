@@ -98,6 +98,8 @@ class Employee implements UserInterface
      */
     private $password;
 
+    
+
     public function __construct()
     {
         $this->setRole('ROLE_USER');
@@ -306,4 +308,5 @@ class Employee implements UserInterface
     public function eraseCredentials()
     {
     }
+
 }
