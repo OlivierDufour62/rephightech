@@ -6,8 +6,11 @@ use App\Entity\Client;
 use App\Entity\Employee;
 use App\Entity\Repair;
 use App\Entity\Repstatus;
+use App\Entity\ServiceProvider;
+use App\Entity\Status;
 use App\Form\ClientType;
 use App\Form\EditTacheType;
+use App\Form\ProviderType;
 use App\Form\RepStatusType;
 use App\Form\TacheType;
 use App\Form\UserType;
@@ -102,6 +105,9 @@ class AdminController extends AbstractController
         $form = $this->createForm(TacheType::class, $repair);
         $form->handleRequest($request);
         $errors = $form->getErrors();
+        $status = $entityManager->getRepository(Status::class)
+            ->find(['id' => 1]);
+        $repair->setStatus($status);
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var UploadedFile $image */
             $image = $form['image']->getData();
@@ -125,7 +131,8 @@ class AdminController extends AbstractController
             $entityManager->flush();
             return new JsonResponse(true);
         }
-        return $this->render('admin/add_tache.html.twig', [ 'error' => $errors,
+        return $this->render('admin/add_tache.html.twig', [
+            'error' => $errors,
             'form' => $form->createView()
         ]);
     }
@@ -149,7 +156,6 @@ class AdminController extends AbstractController
                     ->setGenre('');
             }
             $client = ['id' => $customer->getId(), 'lastname' => $customer->getLastname(), 'firstname' => $customer->getFirstname(), 'email' => $customer->getEmail(), 'phonenumber' => $customer->getPhoneNumber(), 'genre' => $customer->getGenre()];
-
             return new JsonResponse($client);
         } else {
             return new JsonResponse(false);
@@ -180,7 +186,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/editintervention/{id}", name="admin_editintervention")
      */
-    public function editIntervention(Request $request, Repair $repair, FileUploader $fileUploader)
+    public function editIntervention(Request $request, Repair $repair, FileUploader $fileUploader, $id)
     {
         $idrepair = $repair->getId();
         $entityManager = $this->getDoctrine()->getManager();
@@ -188,7 +194,8 @@ class AdminController extends AbstractController
             ->findBy(['rep' => $idrepair]);
         $formRepair = $this->createForm(EditTacheType::class, $repair);
         $formRepair->handleRequest($request);
-        
+        // $status = $entityManager->getRepository(Status::class)
+        //                     ->find(['id' => $id->getId()]);
         // dd($idrepair);
         if ($formRepair->isSubmitted() && $formRepair->isValid()) {
             /** @var UploadedFile $image */
@@ -287,23 +294,43 @@ class AdminController extends AbstractController
      */
     public function detailsRepair(Request $request, Repair $repair)
     {
-        $idrepair = $repair->getId();
+        $idrepair = $repair->getId(); //for the view
         $entityManager = $this->getDoctrine()->getManager();
         $comment = $entityManager->getRepository(Repstatus::class)
             ->findBy(['rep' => $idrepair]);
-        $commentForm = new Repstatus();
-        $formComment = $this->createForm(RepStatusType::class, $commentForm);
+        $idrep = new Repstatus(); //for update
+        $formComment = $this->createForm(RepStatusType::class, $idrep);
         $formComment->handleRequest($request);
-        $commentForm->setRep($repair);
+        $idrep->setRep($repair);
+        $repair->setStatus($idrep->getStatus());
         if ($formComment->isSubmitted() && $formComment->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($commentForm);
+            $entityManager->persist($idrep);
             $entityManager->flush();
             return new JsonResponse(true);
         }
         return $this->render('admin/detailsrepair.html.twig', [
             'repair' => $repair,
-            'commentform' => $commentForm, 'formcomment' => $formComment->createView(), 'comment' => $comment
+            'commentform' => $idrep, 'formcomment' => $formComment->createView(), 'comment' => $comment
+        ]);
+    }
+
+    /**
+     * @Route("/admin/addprovider", name="admin_addprovider")
+     */
+    public function addProvider(Request $request)
+    {
+        $provider = new ServiceProvider();
+        $form = $this->createForm(ProviderType::class, $provider);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($provider);
+            $entityManager->flush();
+            return new JsonResponse(true);
+        }
+        return $this->render('admin/add_provider.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 }

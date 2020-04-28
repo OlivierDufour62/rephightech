@@ -15,7 +15,7 @@
 					<input type="text" class="form-control" placeholder="Référence Intervention">
 				</div>
 				<div class="col col-12 col-lg-6 p-0 mt-4 mt-lg-0">
-					{{ form_widget(formrepair.status.name, {'attr': {'class': 'form-control'}})}}
+					{{ form_widget(formrepair.status, {'attr': {'class': 'form-control'}})}}
 				</div>
 			</div>
 			<div class="row mt-4">
@@ -36,7 +36,6 @@
 			</div>
 			<div class="col-12 col-lg-4 mx-auto p-0">
 				{{ form_widget(formrepair.image, {'attr': {'class': 'form-control-file'}})}}
-
 				<img src="/assets/img/pc.webp" class="img-fluid" alt="">
 			</div>
 			<div class="mt-4 d-flex justify-content-center">

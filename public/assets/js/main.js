@@ -80,6 +80,29 @@ $(document).ready(function () {
         });
     });
 
+    $('#addprovider').on('click', function (e) {
+        e.preventDefault();
+        let data = {};
+        $('.ajaxaddprovider')
+            .serializeArray()
+            .forEach((object) => {
+                data[object.name] = object.value
+            });
+        $.ajax({
+            type: 'POST',
+            url: `/admin/addprovider`,
+            data: data,
+            success: function (data) {
+                if (data === true) {
+                    $(".successsend").removeClass("d-none");
+                    setTimeout(function () {
+                        $(".successsend").addClass("d-none");
+                    }, 1500);
+                }
+            }
+        });
+    });
+
     $('#addtache').on('click', function (e) {
         e.preventDefault();
         let data = {};

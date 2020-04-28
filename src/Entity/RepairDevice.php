@@ -56,6 +56,11 @@ class RepairDevice
      */
     private $date_send;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\ServiceProvider", inversedBy="repairDevices")
+     */
+    private $serviceProvider;
+
     public function __construct()
     {
         $this->setDateCreate(new \DateTime('now'));
@@ -155,6 +160,18 @@ class RepairDevice
     public function setDateSend(?\DateTimeInterface $date_send): self
     {
         $this->date_send = $date_send;
+
+        return $this;
+    }
+
+    public function getServiceProvider(): ?ServiceProvider
+    {
+        return $this->serviceProvider;
+    }
+
+    public function setServiceProvider(?ServiceProvider $serviceProvider): self
+    {
+        $this->serviceProvider = $serviceProvider;
 
         return $this;
     }

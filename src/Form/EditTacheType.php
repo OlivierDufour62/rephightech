@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Repair;
+use App\Entity\Status;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -30,7 +32,11 @@ class EditTacheType extends AbstractType
             ])
         ]])
         ->add('description', TextareaType::class)
-        ->add('status', StatusType::class)
+        ->add('status', EntityType::class, [
+            'class'  => 'App:Status',
+            'choice_label' => 'name',
+            
+        ])
         ;
     }
 

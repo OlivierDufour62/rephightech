@@ -41,7 +41,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         return $request->headers->get('X-AUTH-TOKEN');
     }
 
-    public function getUserApi($credentials, UserProviderInterface $userProvider)
+    public function getUser($credentials, UserProviderInterface $userProvider)
     {
         if (null === $credentials) {
             // The token header was empty, authentication fails with HTTP Status
@@ -59,9 +59,12 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     {
         // Check credentials - e.g. make sure the password is valid.
         // In case of an API token, no credential check is needed.
-
         // Return `true` to cause authentication success
-        return true;
+        if($credentials === $user->getUsername()){
+            return true;
+        }
+
+        
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)

@@ -308,5 +308,5 @@ class Employee implements UserInterface
     public function eraseCredentials()
     {
     }
-
+    
 }

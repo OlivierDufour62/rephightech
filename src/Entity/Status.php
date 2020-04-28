@@ -64,6 +64,7 @@ class Status
         $this->date_update = new \DateTime();
         $this->rep = new ArrayCollection();
         $this->repstatuses = new ArrayCollection();
+        $this->repairs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -180,4 +181,5 @@ class Status
 
         return $this;
     }
+
 }

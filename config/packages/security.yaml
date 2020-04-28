@@ -12,7 +12,8 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        main:
+        
+        default:
             anonymous: lazy
             provider: in_database
             form_login:
@@ -20,14 +21,21 @@ security:
                 check_path: app_login
                 default_target_path: up_tache
                 failure_path: app_login
-            guard:
-                authenticators:
-                    - App\Security\ConnexionAuthenticator
             logout:
                 path: app_logout
                 # where to redirect after logout
                 target: app_login
-
+            guard:
+                authenticators:
+                    - App\Security\ConnexionAuthenticator
+                entry_point: App\Security\ConnexionAuthenticator
+        api:
+            pattern: ^/api/
+            provider: in_database
+            guard:
+                authenticators:
+                    - App\Security\TokenAuthenticator
+        
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
 
@@ -39,4 +47,5 @@ security:
     access_control:
         - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: '^/api', roles: ROLE_API_USER }
+        - { path: '^/', roles: ROLE_USER }

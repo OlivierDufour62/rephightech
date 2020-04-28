@@ -12,6 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RepairRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Repair
 {
@@ -44,11 +45,11 @@ class Repair
     private $image;
 
     /**
-    * @var \DateTime $date_create
-    *
-    * @Gedmo\Timestampable(on="create")
-    * @ORM\Column(type="datetime")
-    */
+     * @var \DateTime $date_create
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     */
     private $date_create;
 
     /**
@@ -93,11 +94,6 @@ class Repair
     private $isActive;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Status", inversedBy="rep", cascade={"persist"})
-     */
-    private $status;
-
-    /**
      * @ORM\Column(type="string", length=150)
      * @Groups({"group1"})
      */
@@ -108,7 +104,13 @@ class Repair
      * @ORM\JoinColumn(nullable=true)
      */
     private $device;
-    
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Status", inversedBy="repairs")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $status;
+
 
     public function __construct()
     {
@@ -287,16 +289,7 @@ class Repair
         return $this;
     }
 
-    public function getStatus(): ?Status
-    {
-        return $this->status;
-    }
 
-    public function setStatus(?Status $status): self
-    {
-        $this->status = $status;
-        return $this;
-    }
 
     public function getReference(): ?string
     {
@@ -322,4 +315,25 @@ class Repair
         return $this;
     }
 
+    public function getStatus(): ?Status
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?Status $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function updateDate()
+    {
+        $this->setDateUpdate(new \Datetime());
+    }
+
+    
 }
