@@ -11,57 +11,60 @@
 		<div class="col-6 mx-auto bg text-white successsend d-none bg-success">
 			<p>Commentaire ajouté</p>
 		</div>
-		<div class="col-12 text-center refclient">
-			<p class="f-size-ref">{{ repair.reference }}</p>
-		</div>
-		{{ form_start(formcomment, {'attr' : {'class': 'ajaxcomment', 'repairid': repair.id}})}}
-		<div class="col-8 col-lg-2 mx-auto mb-3">
-			{{ form_widget(formcomment.status, {'attr': {'class': 'form-control'}})}}
-		</div>
-		<div class="d-flex justify-content-center">
-			<div class="mr-5">
-				<p class="f-size">{{ repair.client.lastname }}</p>
+		<div class="row">
+			<div class="col-12 text-center refclient">
+				<p class="f-size-ref">{{ repair.reference }}</p>
 			</div>
-			<div>
-				<p class="f-size">{{ repair.duration }}mn</p>
+			<div class="col-3">
+				<img class="col-8" src="/uploads/images/{{ repair.image }}" alt="">
 			</div>
-		</div>
-		<div class="col-12 d-flex justify-content-center">
-			<div class="mr-5">
-				<p class="f-size d-size">{{ repair.dateSupported|date('d-m-Y') }}</p>
+			{{ form_start(formcomment, {'attr' : {'class': 'ajaxcomment', 'repairid': repair.id}})}}
+			<div class="col-8 col-lg-6 mx-auto mb-3">
+				{{ form_widget(formcomment.status, {'attr': {'class': 'form-control'}})}}
 			</div>
-			<div>
-				<p class="f-size d-size">{{ repair.dateEnd|date('d-m-Y') }}</p>
-			</div>
-		</div>
-		<div class="d-flex justify-content-center">
-			<p class="f-size">{{ repair.description }}</p>
-		</div>
-		<div class="d-flex justify-content-center">
-			<img class="col-3" src="/uploads/images/{{ repair.image }}" alt="">
-		</div>
-		<div>
-			<div class="d-flex justify-content-center">
-				<h3 class="h-size">Commentaire de l'intervention</h3>
-			</div>
-			{% for com in comment %}
-			<div class="d-flex flex-column justify-content-center">
-				<div class="mx-auto">
-					<h6 class="my-3">{{repair.emp.lastname}} {{repair.emp.firstname}}</h6>
+			<div class="col-12 d-flex">
+				<div class="mr-5">
+					<p class="f-size">Nom : {{ repair.client.lastname }}</p>
 				</div>
-				<div class="mx-auto">
-					<p class="my-3">{{ com.comment }}</p>
+				<div>
+					<p class="f-size">Durée estimée : {{ repair.duration }}mn</p>
 				</div>
 			</div>
-			{% endfor %}
-		</div>
-		<div class="col-12 col-lg-8 d-flex flex-column justify-content-center mx-auto">
-			<div class="form-group col p-0 col-12">
-				{{ form_widget(formcomment.comment, {'attr': {'class': 'form-control resize mt-4','placeholder':'Commentaire', 'rows':'5'}})}}
+			<div class="col-12 d-flex">
+				<div class="mr-5">
+					<p class="f-size d-size">Date de prise en charge : {{ repair.dateSupported|date('d-m-Y') }}</p>
+				</div>
+				<div>
+					<p class="f-size d-size">Date de fin estimée : {{ repair.dateEnd|date('d-m-Y') }}</p>
+				</div>
 			</div>
-			<div class="mt-4 d-flex justify-content-center">
-				<a class="btn bg-black text-white" href="/admin/editintervention/{{repair.id}}">Éditer l'intervention</a>
-				<button class="btn bg-black text-white my-2 my-sm-0 ml-3 addcomment" id="" type="submit">Commenter</button>
+			<div class="">
+				<h3 class="h-size">Description</h3>
+				<p class="f-size">{{ repair.description }}</p>
+			</div>
+			<div>
+				<div class="">
+					<h3 class="h-size">Commentaire de l'intervention</h3>
+				</div>
+				{% for com in comment %}
+				<div class="d-flex flex-column">
+					<div class="mx-auto">
+						<h6 class="my-3">{{repair.emp.lastname}} {{repair.emp.firstname}}</h6>
+					</div>
+					<div class="mx-auto">
+						<p class="my-3">{{ com.comment }}</p>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+			<div class="col-12 col-lg-8 d-flex flex-column justify-content-center mx-auto">
+				<div class="form-group col p-0 col-12">
+					{{ form_widget(formcomment.comment, {'attr': {'class': 'form-control resize mt-4','placeholder':'Commentaire', 'rows':'5'}})}}
+				</div>
+				<div class="mt-4 d-flex justify-content-center">
+					<a class="btn bg-black text-white" href="/admin/editintervention/{{repair.id}}">Éditer l'intervention</a>
+					<button class="btn bg-black text-white my-2 my-sm-0 ml-3 addcomment" id="" type="submit">Commenter</button>
+				</div>
 			</div>
 		</div>
 	</div>

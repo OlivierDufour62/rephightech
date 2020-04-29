@@ -5,15 +5,19 @@ namespace App\Controller;
 use App\Entity\Client;
 use App\Entity\Employee;
 use App\Entity\Repair;
+use App\Entity\ProviderDevice;
 use App\Entity\Repstatus;
 use App\Entity\ServiceProvider;
 use App\Entity\Status;
 use App\Form\ClientType;
 use App\Form\EditTacheType;
 use App\Form\ProviderType;
+use App\Form\ProviderDeviceType;
 use App\Form\RepStatusType;
 use App\Form\TacheType;
 use App\Form\UserType;
+use App\Repository\DeviceRepository;
+use App\Repository\RepairRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -69,6 +73,18 @@ class AdminController extends AbstractController
         $allRepair = $entityManager->getRepository(Repair::class)->findAll();
         return $this->render('admin/intervention.html.twig', [
             'allrepair' => $allRepair
+        ]);
+    }
+
+    /**
+     * @Route("/admin/provider", name="admin_provider")
+     */
+    public function provider()
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $allProvider = $entityManager->getRepository(ServiceProvider::class)->findAll();
+        return $this->render('admin/provider.html.twig', [
+            'allprovider' => $allProvider
         ]);
     }
 
@@ -236,6 +252,27 @@ class AdminController extends AbstractController
     }
 
     /**
+     * @Route("/admin/editprovider/{id}", name="admin_editprovider")
+     */
+    public function editProvider(Request $request, $id)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $provider = $entityManager->getRepository(ServiceProvider::class)
+            ->find($id);
+        $form = $this->createForm(ProviderType::class, $provider);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($provider);
+            $entityManager->flush();
+            return new JsonResponse(true);
+        }
+        return $this->render('admin/edit_provider.html.twig', [
+            'provider' => $provider, 'form' => $form->createView(),
+        ]);
+    }
+
+    /**
      * @Route("/admin/customerisactive/{id}", name="customerisactive")
      */
 
@@ -290,6 +327,23 @@ class AdminController extends AbstractController
     }
 
     /**
+     * @Route("/admin/providerisactive/{id}", name="providerisactive")
+     */
+    public function providerIsActive($id)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $provider = $entityManager->getRepository(ServiceProvider::class)
+            ->find($id);
+        if (!$provider) {
+            return new JsonResponse(false);
+        }
+        $provider->setIsActive(!$provider->getIsActive());
+        $entityManager->persist($provider);
+        $entityManager->flush();
+        return new JsonResponse(true);
+    }
+
+    /**
      * @Route("/admin/details/{id}", name="details_repair")
      */
     public function detailsRepair(Request $request, Repair $repair)
@@ -331,6 +385,38 @@ class AdminController extends AbstractController
         }
         return $this->render('admin/add_provider.html.twig', [
             'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/admin/sendinterprovider", name="admin_sendintervention")
+     */
+    public function sendIntervention(DeviceRepository $deviceRepository, RepairRepository $repair, Request $request)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $inter = $entityManager->getRepository(Repair::class)
+            ->findBy(['status' => 2]);
+        $providerDevice = new ProviderDevice();
+        // dd($request->request->get('provider_device')['device']);
+        $idRepair = $request->request->get('provider_device')['device'];
+        if ($idRepair) {
+            $repair = $repair->find($idRepair);
+            dd($repair);
+            $device = $repair->getDevice();
+            // dd($providerDevice);
+            $providerDevice->setDevice($device);
+            dd($providerDevice);
+        }
+        $form = $this->createForm(ProviderDeviceType::class, $providerDevice);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($providerDevice);
+            $entityManager->flush();
+            return new JsonResponse(true);
+        }
+        return $this->render('admin/sendinter.html.twig', [
+            'inter' => $inter, 'form' => $form->createView()
         ]);
     }
 }

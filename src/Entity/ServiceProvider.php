@@ -52,11 +52,6 @@ class ServiceProvider implements UserInterface
     private $apiToken;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\RepairDevice", mappedBy="serviceProvider")
-     */
-    private $repairDevices;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $email;
@@ -81,11 +76,22 @@ class ServiceProvider implements UserInterface
      */
     private $number;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isActive;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ProviderDevice", mappedBy="serviceProvider")
+     */
+    private $providerDevices;
+
     public function __construct()
     {
+        $this->setIsActive(true);
         $this->setDateCreate(new \DateTime('now'));
         $this->date_update = new \DateTime();
-        $this->repairDevices = new ArrayCollection();
+        $this->providerDevices = new ArrayCollection();
     }
     
     public function getId(): ?int
@@ -182,37 +188,6 @@ class ServiceProvider implements UserInterface
     {
     }
 
-    /**
-     * @return Collection|RepairDevice[]
-     */
-    public function getRepairDevices(): Collection
-    {
-        return $this->repairDevices;
-    }
-
-    public function addRepairDevice(RepairDevice $repairDevice): self
-    {
-        if (!$this->repairDevices->contains($repairDevice)) {
-            $this->repairDevices[] = $repairDevice;
-            $repairDevice->setServiceProvider($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRepairDevice(RepairDevice $repairDevice): self
-    {
-        if ($this->repairDevices->contains($repairDevice)) {
-            $this->repairDevices->removeElement($repairDevice);
-            // set the owning side to null (unless already changed)
-            if ($repairDevice->getServiceProvider() === $this) {
-                $repairDevice->setServiceProvider(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getEmail(): ?string
     {
         return $this->email;
@@ -269,6 +244,49 @@ class ServiceProvider implements UserInterface
     public function setNumber(string $number): self
     {
         $this->number = $number;
+
+        return $this;
+    }
+
+    public function getIsActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): self
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ProviderDevice[]
+     */
+    public function getProviderDevices(): Collection
+    {
+        return $this->providerDevices;
+    }
+
+    public function addProviderDevice(ProviderDevice $providerDevice): self
+    {
+        if (!$this->providerDevices->contains($providerDevice)) {
+            $this->providerDevices[] = $providerDevice;
+            $providerDevice->setServiceProvider($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProviderDevice(ProviderDevice $providerDevice): self
+    {
+        if ($this->providerDevices->contains($providerDevice)) {
+            $this->providerDevices->removeElement($providerDevice);
+            // set the owning side to null (unless already changed)
+            if ($providerDevice->getServiceProvider() === $this) {
+                $providerDevice->setServiceProvider(null);
+            }
+        }
 
         return $this;
     }

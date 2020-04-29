@@ -32,6 +32,10 @@
     background-color: white;
 }
 
+.dnone{
+    display:none;
+}
+
 @media screen and (max-width: 576px) {
 
     .h-size{

@@ -72,16 +72,16 @@ class Device
     private $rep;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ServiceProvider", mappedBy="device")
+     * @ORM\OneToMany(targetEntity="App\Entity\ProviderDevice", mappedBy="device")
      */
-    private $serviceProviders;
+    private $providerDevice;
 
     public function __construct()
     {
         $this->setDateCreate(new \DateTime('now'));
         $this->date_update = new \DateTime();
         $this->rep = new ArrayCollection();
-        $this->serviceProviders = new ArrayCollection();
+        $this->providerDevices = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -212,38 +212,38 @@ class Device
                 $rep->setDevice(null);
             }
         }
-
         return $this;
     }
 
     /**
-     * @return Collection|ServiceProvider[]
+     * @return Collection|ProviderDevice[]
      */
-    public function getServiceProviders(): Collection
+    public function getProviderDevices(): Collection
     {
-        return $this->serviceProviders;
+        return $this->providerDevices;
     }
 
-    public function addServiceProvider(ServiceProvider $serviceProvider): self
+    public function addProviderDevice(ProviderDevice $providerDevice): self
     {
-        if (!$this->serviceProviders->contains($serviceProvider)) {
-            $this->serviceProviders[] = $serviceProvider;
-            $serviceProvider->setDevice($this);
+        if (!$this->providerDevice->contains($providerDevice)) {
+            $this->providerDevice[] = $providerDevice;
+            $providerDevice->setDevice($this);
         }
 
         return $this;
     }
 
-    public function removeServiceProvider(ServiceProvider $serviceProvider): self
+    public function removeProviderDevice(ProviderDevice $providerDevice): self
     {
-        if ($this->serviceProviders->contains($serviceProvider)) {
-            $this->serviceProviders->removeElement($serviceProvider);
+        if ($this->providerDevice->contains($providerDevice)) {
+            $this->providerDevice->removeElement($providerDevice);
             // set the owning side to null (unless already changed)
-            if ($serviceProvider->getDevice() === $this) {
-                $serviceProvider->setDevice(null);
+            if ($providerDevice->getDevice() === $this) {
+                $providerDevice->setDevice(null);
             }
         }
 
         return $this;
     }
+
 }

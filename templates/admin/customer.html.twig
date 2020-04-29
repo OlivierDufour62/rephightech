@@ -22,27 +22,27 @@
 					</tr>
 				</thead>
 				<tbody>
-				{% for customer in allCustomer %}
-	
-					<tr>
-						<th scope="row">{{ customer.id }}</th>
-						<td>{{ customer.lastname }}</td>
-						<td>{{ customer.firstname }}</td>
-						<td>{{ customer.email }}</td>
-						<td>{{ customer.phonenumber }}</td>
-						<td>
-							<a href="/admin/editcustomer/{{customer.id}}">
-								<i class="icofont-arrow-right text-white"></a>
-							</i>
-						</td>
-						<td>
-							<div class="custom-control custom-switch">
-								<input type="checkbox" class="custom-control-input customerswitches" customerswitches="{{customer.id}}" id="customSwitches{{customer.id}}"  {% if customer.isActive %} checked {% endif %}>
-								<label class="custom-control-label" for="customSwitches{{customer.id}}"></label>
-							</div>
-						</td>
-					</tr>
-				{% endfor %}
+					{% for customer in allCustomer %}
+
+						<tr>
+							<th scope="row">{{ customer.id }}</th>
+							<td>{{ customer.lastname }}</td>
+							<td>{{ customer.firstname }}</td>
+							<td>{{ customer.email }}</td>
+							<td>{{ customer.phonenumber }}</td>
+							<td>
+								<a href="/admin/editcustomer/{{customer.id}}">
+									<i class="icofont-arrow-right text-white"></i>
+								</a>
+							</td>
+							<td>
+								<div class="custom-control custom-switch">
+									<input type="checkbox" class="custom-control-input customerswitches" customerswitches="{{customer.id}}" id="customSwitches{{customer.id}}" {% if customer.isActive %} checked {% endif %}>
+									<label class="custom-control-label" for="customSwitches{{customer.id}}"></label>
+								</div>
+							</td>
+						</tr>
+					{% endfor %}
 				</tbody>
 			</table>
 		</div>

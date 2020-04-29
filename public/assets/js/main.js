@@ -1,13 +1,22 @@
 //admin js
 
 $(document).ready(function () {
-
-    
-    
+    $('.dropdown').click(function () {
+        $('.dropdowntoggle').toggle()
+    });
 
     $(".hamb").click(function () {
         $(".menu").toggle();
     });
+
+    $('.send').on('click', function () {
+        $("#dialog").dialog();
+    });
+
+    $('.sendprovider').on('click', function() {
+        let id = $(this).attr('id');
+        $('#provider_device_device').val(id);
+    })
 
     $('#save').on('click', function (e) {
         e.preventDefault();
@@ -21,6 +30,30 @@ $(document).ready(function () {
         $.ajax({
             type: 'POST',
             url: `/admin/editemployee/${id}`,
+            data: data,
+            success: function (data) {
+                if (data === true) {
+                    $(".successsend").removeClass("d-none");
+                    setTimeout(function () {
+                        $(".successsend").addClass("d-none");
+                    }, 1500);
+                }
+            }
+        });
+    });
+
+    $('#editprovider').on('click', function (e) {
+        e.preventDefault();
+        let data = {};
+        const id = $('.ajaxeditprovider').attr('providerid');
+        $('.ajaxeditprovider')
+            .serializeArray()
+            .forEach((object) => {
+                data[object.name] = object.value
+            });
+        $.ajax({
+            type: 'POST',
+            url: `/admin/editprovider/${id}`,
             data: data,
             success: function (data) {
                 if (data === true) {
@@ -119,10 +152,10 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function (data) {
-                    $(".successsend").removeClass("d-none");
-                    setTimeout(function () {
-                        $(".successsend").addClass("d-none");
-                    }, 1500);
+                $(".successsend").removeClass("d-none");
+                setTimeout(function () {
+                    $(".successsend").addClass("d-none");
+                }, 1500);
             },
             error: function (err) {
                 console.log(err);
@@ -176,6 +209,14 @@ $(document).ready(function () {
         }).done();
     });
 
+    $('.providerswitches').on('change', function () {
+        const id = $(this).attr('providerswitches');
+        $('.provderswitches')
+        $.ajax({
+            url: `/admin/providerisactive/${id}`,
+        }).done();
+    });
+
     $('.addcomment').on('click', function (e) {
         e.preventDefault();
         let data = {};
@@ -185,6 +226,7 @@ $(document).ready(function () {
             .forEach((object) => {
                 data[object.name] = object.value
             });
+        let comment = $('.resize').val();
         $.ajax({
             type: 'POST',
             url: `/admin/details/${id}`,
@@ -196,6 +238,7 @@ $(document).ready(function () {
                         $(".successsend").addClass("d-none");
                     }, 1500);
                 }
+                $('.bg').append(comment) //ajout commentaire sans actualisation
             }
         });
     });

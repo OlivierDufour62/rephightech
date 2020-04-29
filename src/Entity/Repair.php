@@ -101,7 +101,7 @@ class Repair
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Device", inversedBy="rep", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=false)
      */
     private $device;
 

@@ -11,7 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RepairProviderRepository")
  */
-class RepairDevice
+class ProviderDevice
 {
     /**
      * @ORM\Id()
@@ -19,16 +19,6 @@ class RepairDevice
      * @ORM\Column(type="integer")
      */
     private $id;
-
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\device", cascade={"persist", "remove"})
-     */
-    private $device;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ServiceProvider", mappedBy="repairProvider")
-     */
-    private $provider;
 
     /**
     * @var \DateTime $date_create
@@ -57,9 +47,16 @@ class RepairDevice
     private $date_send;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ServiceProvider", inversedBy="repairDevices")
+     * @ORM\ManyToOne(targetEntity="App\Entity\ServiceProvider", inversedBy="providerDevices")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $serviceProvider;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Device", inversedBy="providerDevice")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $device;
 
     public function __construct()
     {
@@ -71,49 +68,6 @@ class RepairDevice
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getDevice(): ?device
-    {
-        return $this->device;
-    }
-
-    public function setDevice(?device $device): self
-    {
-        $this->device = $device;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|ServiceProvider[]
-     */
-    public function getProvider(): Collection
-    {
-        return $this->provider;
-    }
-
-    public function addProvider(ServiceProvider $provider): self
-    {
-        if (!$this->provider->contains($provider)) {
-            $this->provider[] = $provider;
-            $provider->setRepairProvider($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProvider(ServiceProvider $provider): self
-    {
-        if ($this->provider->contains($provider)) {
-            $this->provider->removeElement($provider);
-            // set the owning side to null (unless already changed)
-            if ($provider->getRepairProvider() === $this) {
-                $provider->setRepairProvider(null);
-            }
-        }
-
-        return $this;
     }
 
     public function getDateCreate(): ?\DateTimeInterface
@@ -172,6 +126,18 @@ class RepairDevice
     public function setServiceProvider(?ServiceProvider $serviceProvider): self
     {
         $this->serviceProvider = $serviceProvider;
+
+        return $this;
+    }
+
+    public function getDevice(): ?Device
+    {
+        return $this->device;
+    }
+
+    public function setDevice(?Device $device): self
+    {
+        $this->device = $device;
 
         return $this;
     }
