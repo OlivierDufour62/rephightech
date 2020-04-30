@@ -18,7 +18,7 @@ class ProviderDeviceType extends AbstractType
             'class'  => 'App:ServiceProvider',
             'choice_label' => 'name',
         ])
-        ->add('device', HiddenType::class)
+        ->add('repair_id', HiddenType::class)
         ;
         
         

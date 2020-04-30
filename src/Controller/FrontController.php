@@ -52,9 +52,12 @@ class FrontController extends AbstractController
         $idrepair = $repair->getId();
         $entityManager = $this->getDoctrine()->getManager();
         $comment = $entityManager->getRepository(Repstatus::class)
-                                ->findBy(['rep' => $idrepair]);
+            ->findBy(['rep' => $idrepair]);
         $formRepair = $this->createForm(EditTacheType::class, $repair);
         $formRepair->handleRequest($request);
+        // $status = $entityManager->getRepository(Status::class)
+        //                     ->find(['id' => $id->getId()]);
+        // dd($idrepair);
         if ($formRepair->isSubmitted() && $formRepair->isValid()) {
             /** @var UploadedFile $image */
             $image = $formRepair['image']->getData();
@@ -156,22 +159,24 @@ class FrontController extends AbstractController
 
     public function detailsRepair(Request $request, Repair $repair)
     {
-        $idrepair = $repair->getId();
+        $idrepair = $repair->getId(); //for the view
         $entityManager = $this->getDoctrine()->getManager();
         $comment = $entityManager->getRepository(Repstatus::class)
-                                ->findBy(['rep' => $idrepair]);
-        $commentForm = new Repstatus();
-        $formComment = $this->createForm(RepStatusType::class, $commentForm);
+            ->findBy(['rep' => $idrepair]);
+        $idrep = new Repstatus(); //for update
+        $formComment = $this->createForm(RepStatusType::class, $idrep);
         $formComment->handleRequest($request);
-        $commentForm->setRep($repair);
+        $idrep->setRep($repair);
+        $repair->setStatus($idrep->getStatus());
         if ($formComment->isSubmitted() && $formComment->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($commentForm);
+            $entityManager->persist($idrep);
             $entityManager->flush();
             return new JsonResponse(true);
         }
-        return $this->render('front/detailsrepair.html.twig', ['repair' => $repair,
-            'commentform' => $commentForm, 'formcomment' => $formComment->createView(),'comment' => $comment
+        return $this->render('front/detailsrepair.html.twig', [
+            'repair' => $repair,
+            'commentform' => $idrep, 'formcomment' => $formComment->createView(), 'comment' => $comment
         ]);
     }
 }

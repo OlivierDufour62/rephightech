@@ -397,19 +397,16 @@ class AdminController extends AbstractController
         $inter = $entityManager->getRepository(Repair::class)
             ->findBy(['status' => 2]);
         $providerDevice = new ProviderDevice();
-        // dd($request->request->get('provider_device')['device']);
-        $idRepair = $request->request->get('provider_device')['device'];
-        if ($idRepair) {
-            $repair = $repair->find($idRepair);
-            dd($repair);
-            $device = $repair->getDevice();
-            // dd($providerDevice);
-            $providerDevice->setDevice($device);
-            dd($providerDevice);
-        }
         $form = $this->createForm(ProviderDeviceType::class, $providerDevice);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $repair = $repair->find($form->get('repair_id')->getData());
+            $device = $deviceRepository->find($repair->getDevice()->getId());
+            $providerDevice->setDevice($device);
+            $status = $entityManager->getRepository(Status::class)
+                                ->find(['id' => 3]);
+            $repair->setStatus($status);
+            $providerDevice->setServiceProvider($form->get('provider')->getData());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($providerDevice);
             $entityManager->flush();

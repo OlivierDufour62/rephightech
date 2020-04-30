@@ -15,7 +15,7 @@
 			<div class="col-12 text-center refclient">
 				<p class="f-size-ref">{{ repair.reference }}</p>
 			</div>
-			<div class="col-3">
+			<div class="col-4">
 				<img class="col-8" src="/uploads/images/{{ repair.image }}" alt="">
 			</div>
 			{{ form_start(formcomment, {'attr' : {'class': 'ajaxcomment', 'repairid': repair.id}})}}
@@ -24,49 +24,57 @@
 			</div>
 			<div class="col-12 d-flex">
 				<div class="mr-5">
-					<p class="f-size">Nom : {{ repair.client.lastname }}</p>
+					<p class="f-size">Nom :
+						{{ repair.client.lastname }}</p>
 				</div>
 				<div>
-					<p class="f-size">Durée estimée : {{ repair.duration }}mn</p>
+					<p class="f-size">Durée estimée :
+						{{ repair.duration }}mn</p>
 				</div>
 			</div>
 			<div class="col-12 d-flex">
 				<div class="mr-5">
-					<p class="f-size d-size">Date de prise en charge : {{ repair.dateSupported|date('d-m-Y') }}</p>
+					<p class="f-size d-size">Date de prise en charge :
+						{{ repair.dateSupported|date('d-m-Y') }}</p>
 				</div>
 				<div>
-					<p class="f-size d-size">Date de fin estimée : {{ repair.dateEnd|date('d-m-Y') }}</p>
+					<p class="f-size d-size">Date de fin estimée :
+						{{ repair.dateEnd|date('d-m-Y') }}</p>
 				</div>
 			</div>
 			<div class="">
 				<h3 class="h-size">Description</h3>
 				<p class="f-size">{{ repair.description }}</p>
 			</div>
+		</div>
+		<div class="ml-5">
 			<div>
-				<div class="">
-					<h3 class="h-size">Commentaire de l'intervention</h3>
-				</div>
-				{% for com in comment %}
-				<div class="d-flex flex-column">
-					<div class="mx-auto">
-						<h6 class="my-3">{{repair.emp.lastname}} {{repair.emp.firstname}}</h6>
-					</div>
-					<div class="mx-auto">
-						<p class="my-3">{{ com.comment }}</p>
-					</div>
-				</div>
-				{% endfor %}
+				<h3 class="h-size">Commentaire de l'intervention</h3>
 			</div>
-			<div class="col-12 col-lg-8 d-flex flex-column justify-content-center mx-auto">
-				<div class="form-group col p-0 col-12">
-					{{ form_widget(formcomment.comment, {'attr': {'class': 'form-control resize mt-4','placeholder':'Commentaire', 'rows':'5'}})}}
-				</div>
-				<div class="mt-4 d-flex justify-content-center">
-					<a class="btn bg-black text-white" href="/admin/editintervention/{{repair.id}}">Éditer l'intervention</a>
-					<button class="btn bg-black text-white my-2 my-sm-0 ml-3 addcomment" id="" type="submit">Commenter</button>
-				</div>
+			{% for com in comment %}
+				{% if com.comment != null %}
+					<div class="d-flex flex-column ml-5">
+						<div class="">
+							<h5 class="my-3">{{repair.emp.lastname}}
+								{{repair.emp.firstname}}</h5>
+						</div>
+						<div class="ml-4">
+							<p class="mb-3">{{ com.comment }}</p>
+						</div>
+					</div>
+				{% endif %}
+			{% endfor %}
+		</div>
+		<div class="col-12 col-lg-8 d-flex flex-column justify-content-center mx-auto">
+			<div class="form-group col p-0 col-12">
+				{{ form_widget(formcomment.comment, {'attr': {'class': 'form-control resize mt-4','placeholder':'Commentaire', 'rows':'5'}})}}
+			</div>
+			<div class="mt-4 d-flex justify-content-center">
+				<a class="btn bg-black text-white" href="/admin/editintervention/{{repair.id}}">Éditer l'intervention</a>
+				<button class="btn bg-black text-white my-2 my-sm-0 ml-3 addcomment" id="" type="submit">Commenter</button>
 			</div>
 		</div>
+
 	</div>
 
 	{{ form_end(formcomment) }}

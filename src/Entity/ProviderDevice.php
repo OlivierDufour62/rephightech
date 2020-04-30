@@ -58,6 +58,8 @@ class ProviderDevice
      */
     private $device;
 
+    private $repair_id;
+
     public function __construct()
     {
         $this->setDateCreate(new \DateTime('now'));
@@ -138,6 +140,26 @@ class ProviderDevice
     public function setDevice(?Device $device): self
     {
         $this->device = $device;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of repair_id
+     */ 
+    public function getRepairId()
+    {
+        return $this->repair_id;
+    }
+
+    /**
+     * Set the value of repair_id
+     *
+     * @return  self
+     */ 
+    public function setRepairId($repair_id)
+    {
+        $this->repair_id = $repair_id;
 
         return $this;
     }

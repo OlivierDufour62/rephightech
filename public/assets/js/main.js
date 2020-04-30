@@ -15,7 +15,7 @@ $(document).ready(function () {
 
     $('.sendprovider').on('click', function() {
         let id = $(this).attr('id');
-        $('#provider_device_device').val(id);
+        $('#provider_device_repair_id').val(id);
     })
 
     $('#save').on('click', function (e) {
