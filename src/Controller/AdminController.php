@@ -25,6 +25,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Service\FileUploader;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
+use Symfony\Component\Mime\Email;
 
 class AdminController extends AbstractController
 {
@@ -391,7 +397,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/sendinterprovider", name="admin_sendintervention")
      */
-    public function sendIntervention(DeviceRepository $deviceRepository, RepairRepository $repair, Request $request)
+    public function sendIntervention(DeviceRepository $deviceRepository, RepairRepository $repair, Request $request, MailerInterface $mailer)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $inter = $entityManager->getRepository(Repair::class)
@@ -404,14 +410,29 @@ class AdminController extends AbstractController
             $device = $deviceRepository->find($repair->getDevice()->getId());
             $providerDevice->setDevice($device);
             $status = $entityManager->getRepository(Status::class)
-                                ->find(['id' => 3]);
+                ->find(['id' => 3]);
             $repair->setStatus($status);
             $providerDevice->setServiceProvider($form->get('provider')->getData());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($providerDevice);
             $entityManager->flush();
-            return new JsonResponse(true);
+            $toAddress = $providerDevice->getServiceProvider()->getEmail();
+            $toName = $providerDevice->getServiceProvider()->getName();
+            $ref = new Repair();
+            $toRef = $ref->getReference();
+            $email = (new TemplatedEmail())
+                ->from('projetwebafpa@gmail.com')
+                ->to($toAddress)
+                ->subject('Nous vous avons envoyer une intervention :-)')
+                ->htmlTemplate('/emails/inter.html.twig')
+                ->context([
+                        'name' => $toName,
+                        'ref' => $toRef
+                ])
+                ;
+            $mailer->send($email);
         }
+
         return $this->render('admin/sendinter.html.twig', [
             'inter' => $inter, 'form' => $form->createView()
         ]);
