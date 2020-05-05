@@ -287,7 +287,6 @@ class ServiceProvider implements UserInterface
                 $providerDevice->setServiceProvider(null);
             }
         }
-
         return $this;
     }
 }

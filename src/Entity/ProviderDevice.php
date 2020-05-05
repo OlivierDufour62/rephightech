@@ -47,18 +47,17 @@ class ProviderDevice
     private $date_send;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ServiceProvider", inversedBy="providerDevices")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $serviceProvider;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Device", inversedBy="providerDevice")
      * @ORM\JoinColumn(nullable=false)
      */
     private $device;
 
     private $repair_id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Users", inversedBy="providerDevices")
+     */
+    private $users;
 
     public function __construct()
     {
@@ -120,18 +119,6 @@ class ProviderDevice
         return $this;
     }
 
-    public function getServiceProvider(): ?ServiceProvider
-    {
-        return $this->serviceProvider;
-    }
-
-    public function setServiceProvider(?ServiceProvider $serviceProvider): self
-    {
-        $this->serviceProvider = $serviceProvider;
-
-        return $this;
-    }
-
     public function getDevice(): ?Device
     {
         return $this->device;
@@ -160,6 +147,18 @@ class ProviderDevice
     public function setRepairId($repair_id)
     {
         $this->repair_id = $repair_id;
+
+        return $this;
+    }
+
+    public function getUsers(): ?Users
+    {
+        return $this->users;
+    }
+
+    public function setUsers(?Users $users): self
+    {
+        $this->users = $users;
 
         return $this;
     }

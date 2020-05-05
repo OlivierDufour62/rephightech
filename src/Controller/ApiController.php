@@ -12,7 +12,18 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ApiController extends AbstractController
 {
-    
+
+    /**
+     * @Route("/api/login_check", name="login")
+     */
+    public function login(): JsonResponse
+    {
+        $user = $this->getUser();
+        return $this->json(['username' => $user->getUsername(),
+                            'roles' => $user->getRoles()
+        ]);
+    }
+
     /**
      * @Route("/api/device/{id}", name="api_device")
      */
@@ -32,4 +43,6 @@ class ApiController extends AbstractController
         $response = new JsonResponse($json, 200, [], true);
         return $response;
     }
+
+    
 }

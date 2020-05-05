@@ -2,7 +2,8 @@
 
 namespace App\Form;
 
-use App\Entity\Employee;
+use App\Entity\Address;
+use App\Entity\Users;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -15,6 +16,7 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('name', TextType::class)
             ->add('lastname', TextType::class)
             ->add('firstname', TextType::class)
             ->add('phonenumber', TextType::class)
@@ -28,6 +30,7 @@ class UserType extends AbstractType
                 'choices' => [
                         'Utilisateur' => 'ROLE_USER',
                         'Admin' => 'ROLE_ADMIN',
+                        'Prestataire' => 'ROLE_SERVICE_PROVIDER'
             ],
             ])
         ;
@@ -36,7 +39,7 @@ class UserType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Employee::class,
+            'data_class' => Users::class,
         ]);
     }
 }

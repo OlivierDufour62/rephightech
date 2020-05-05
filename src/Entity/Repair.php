@@ -77,10 +77,10 @@ class Repair
     private $client;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Employee", inversedBy="repairs")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Users", inversedBy="repairs")
      * @ORM\JoinColumn(nullable=true)
      */
-    private $emp;
+    private $users;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Repstatus", mappedBy="rep", orphanRemoval=true)
@@ -234,14 +234,14 @@ class Repair
         return $this;
     }
 
-    public function getEmp(): ?employee
+    public function getUsers(): ?users
     {
-        return $this->emp;
+        return $this->users;
     }
 
-    public function setEmp(?employee $emp): self
+    public function setUsers(?users $users): self
     {
-        $this->emp = $emp;
+        $this->users = $users;
 
         return $this;
     }

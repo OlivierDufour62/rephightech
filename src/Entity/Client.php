@@ -70,7 +70,6 @@ class Client
      */
     private $date_update;
 
-
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */

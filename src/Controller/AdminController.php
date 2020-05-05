@@ -2,16 +2,17 @@
 
 namespace App\Controller;
 
+use App\Entity\Address;
 use App\Entity\Client;
-use App\Entity\Employee;
 use App\Entity\Repair;
 use App\Entity\ProviderDevice;
 use App\Entity\Repstatus;
 use App\Entity\ServiceProvider;
 use App\Entity\Status;
+use App\Entity\Users;
+use App\Form\AddressType;
 use App\Form\ClientType;
 use App\Form\EditTacheType;
-use App\Form\ProviderType;
 use App\Form\ProviderDeviceType;
 use App\Form\RepStatusType;
 use App\Form\TacheType;
@@ -27,10 +28,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\Mailer;
-use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
-use Symfony\Component\Mime\Email;
 
 class AdminController extends AbstractController
 {
@@ -50,7 +47,7 @@ class AdminController extends AbstractController
     public function employee()
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $allEmployee = $entityManager->getRepository(Employee::class)
+        $allEmployee = $entityManager->getRepository(Users::class)
             ->findAll();
         return $this->render('admin/employee.html.twig', [
             'allEmployee' => $allEmployee,
@@ -88,7 +85,7 @@ class AdminController extends AbstractController
     public function provider()
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $allProvider = $entityManager->getRepository(ServiceProvider::class)->findAll();
+        $allProvider = $entityManager->getRepository(Users::class)->findBy(['role' => 'ROLE_PROVIDER']);
         return $this->render('admin/provider.html.twig', [
             'allprovider' => $allProvider
         ]);
@@ -99,14 +96,15 @@ class AdminController extends AbstractController
      */
     public function addEmployee(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
-        $employee = new Employee();
-        $form = $this->createForm(UserType::class, $employee);
+        $addUsers = new Address();
+        $userPassword = new Users();
+        $form = $this->createForm(AddressType::class, $addUsers);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $passwordEncoder->encodePassword($employee, $employee->getPassword());
-            $employee->setPassword($password);
+            $password = $passwordEncoder->encodePassword($userPassword, $addUsers->getUsers()->getPassword());
+            $userPassword->setPassword($password);
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($employee);
+            $entityManager->persist($addUsers);
             $entityManager->flush();
             return new JsonResponse(true);
         }
@@ -123,7 +121,7 @@ class AdminController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $employee = $this->getUser();
         $repair = new Repair();
-        $repair->setEmp($employee);
+        $repair->setUsers($employee);
         $form = $this->createForm(TacheType::class, $repair);
         $form->handleRequest($request);
         $errors = $form->getErrors();
@@ -242,7 +240,7 @@ class AdminController extends AbstractController
     public function editEmployee(Request $request, $id)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $employee = $entityManager->getRepository(Employee::class)
+        $employee = $entityManager->getRepository(Users::class)
             ->find($id);
         $form = $this->createForm(UserType::class, $employee);
         $form->handleRequest($request);
@@ -263,9 +261,9 @@ class AdminController extends AbstractController
     public function editProvider(Request $request, $id)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $provider = $entityManager->getRepository(ServiceProvider::class)
+        $provider = $entityManager->getRepository(Users::class)
             ->find($id);
-        $form = $this->createForm(ProviderType::class, $provider);
+        $form = $this->createForm(UserType::class, $provider);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
@@ -303,13 +301,13 @@ class AdminController extends AbstractController
     public function employeeIsActive($id)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $customer = $entityManager->getRepository(Employee::class)
+        $employee = $entityManager->getRepository(Users::class)
             ->find($id);
-        if (!$customer) {
+        if (!$employee) {
             return new JsonResponse(false);
         }
-        $customer->setIsActive(!$customer->getIsActive());
-        $entityManager->persist($customer);
+        $employee->setIsActive(!$employee->getIsActive());
+        $entityManager->persist($employee);
         $entityManager->flush();
         return new JsonResponse(true);
     }
@@ -321,13 +319,13 @@ class AdminController extends AbstractController
     public function repairIsActive($id)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $customer = $entityManager->getRepository(Repair::class)
+        $repair = $entityManager->getRepository(Repair::class)
             ->find($id);
-        if (!$customer) {
+        if (!$repair) {
             return new JsonResponse(false);
         }
-        $customer->setIsActive(!$customer->getIsActive());
-        $entityManager->persist($customer);
+        $repair->setIsActive(!$repair->getIsActive());
+        $entityManager->persist($repair);
         $entityManager->flush();
         return new JsonResponse(true);
     }
@@ -381,7 +379,7 @@ class AdminController extends AbstractController
     public function addProvider(Request $request)
     {
         $provider = new ServiceProvider();
-        $form = $this->createForm(ProviderType::class, $provider);
+        $form = $this->createForm(UserType::class, $provider);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
@@ -399,9 +397,12 @@ class AdminController extends AbstractController
      */
     public function sendIntervention(DeviceRepository $deviceRepository, RepairRepository $repair, Request $request, MailerInterface $mailer)
     {
+        //affiche les intervention ayant pour status en cours
         $entityManager = $this->getDoctrine()->getManager();
         $inter = $entityManager->getRepository(Repair::class)
             ->findBy(['status' => 2]);
+        
+        // crée le formulaire pour enregistré dans ProviderDevice
         $providerDevice = new ProviderDevice();
         $form = $this->createForm(ProviderDeviceType::class, $providerDevice);
         $form->handleRequest($request);
@@ -409,15 +410,19 @@ class AdminController extends AbstractController
             $repair = $repair->find($form->get('repair_id')->getData());
             $device = $deviceRepository->find($repair->getDevice()->getId());
             $providerDevice->setDevice($device);
+            // pour modifier le statut 
             $status = $entityManager->getRepository(Status::class)
                 ->find(['id' => 3]);
             $repair->setStatus($status);
-            $providerDevice->setServiceProvider($form->get('provider')->getData());
+            $repStatus = new Repstatus();
+            $repStatus->setStatus($status);
+            $providerDevice->setUsers($form->get('users')->getData());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($providerDevice);
             $entityManager->flush();
-            $toAddress = $providerDevice->getServiceProvider()->getEmail();
-            $toName = $providerDevice->getServiceProvider()->getName();
+            //envoie email automatique pour prévenir de l'expédition d'une intervention au prestataire choisi
+            $toAddress = $providerDevice->getUsers()->getEmail();
+            $toName = $providerDevice->getUsers()->getName();
             $ref = new Repair();
             $toRef = $ref->getReference();
             $email = (new TemplatedEmail())
@@ -432,7 +437,6 @@ class AdminController extends AbstractController
                 ;
             $mailer->send($email);
         }
-
         return $this->render('admin/sendinter.html.twig', [
             'inter' => $inter, 'form' => $form->createView()
         ]);

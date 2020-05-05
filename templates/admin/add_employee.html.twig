@@ -15,34 +15,54 @@
 			{{ form_start(form, {'attr': {'class': 'col-12 mx-auto ajaxaddemployee'}})}}
 			<div class="mt-4 col-12 text-center">
 				<div class="form-check bord">
-					{{ form_widget(form.genre, {'attr': {'class': 'form-control radio-custom bord'}})}}
+					{{ form_widget(form.users.genre, {'attr': {'class': 'form-control radio-custom bord'}})}}
 				</div>
 			</div>
 			<div class="row w-100 col-6 p-0 m-0 mx-auto mt-4">
 				<div class="col">
-					{{ form_widget(form.lastname, {'attr': {'class': 'form-control', 'placeholder': 'Nom'}})}}
+					{{ form_widget(form.users.lastname, {'attr': {'class': 'form-control', 'placeholder': 'Nom'}})}}
 				</div>
 				<div class="col">
-					{{ form_widget(form.firstname, {'attr': {'class': 'form-control', 'placeholder': 'Prénom'}})}}
+					{{ form_widget(form.users.firstname, {'attr': {'class': 'form-control', 'placeholder': 'Prénom'}})}}
 				</div>
 			</div>
 			<div class="row w-100 col-12 col-md-6 p-0 m-0 mx-auto mt-4">
 				<div class="col">
-					{{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email' }})}}
+					{{ form_widget(form.users.email, {'attr': {'class': 'form-control', 'placeholder': 'Email' }})}}
 				</div>
 				<div class="col">
-					{{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Password' }})}}
+					{{ form_widget(form.users.password, {'attr': {'class': 'form-control', 'placeholder': 'Password' }})}}
 				</div>
-
+			</div>
+			<div class="row w-100 col-12 col-md-6 p-0 m-0 mx-auto mt-4">
+				<div class="col">
+					{{ form_widget(form.users.name, {'attr': {'class': 'form-control', 'placeholder': 'name' }})}}
+				</div>
+				<div class="col">
+					{{ form_widget(form.address, {'attr': {'class': 'form-control', 'placeholder': 'adresse' }})}}
+				</div>
+			</div>
+			<div class="row w-100 col-12 col-md-6 p-0 m-0 mx-auto mt-4">
+				<div class="col">
+					{{ form_widget(form.zipcode, {'attr': {'class': 'form-control', 'placeholder': 'zipcode' }})}}
+				</div>
+				<div class="col">
+					{{ form_widget(form.number, {'attr': {'class': 'form-control', 'placeholder': 'number' }})}}
+				</div>
+			</div>
+			<div class="row w-100 col-12 col-md-6 p-0 m-0 mx-auto mt-4">
+				<div class="col">
+					{{ form_widget(form.city, {'attr': {'class': 'form-control', 'placeholder': 'city' }})}}
+				</div>
 			</div>
 			<div class="w-100 col-12 col-md-6 p-0 m-0 mx-auto mt-4">
 				<div class="col">
-					{{ form_widget(form.phonenumber, {'attr': {'class': 'form-control', 'placeholder': 'Téléphone'}})}}
+					{{ form_widget(form.users.phonenumber, {'attr': {'class': 'form-control', 'placeholder': 'Téléphone'}})}}
 				</div>
 			</div>
 			<div class="w-100 col-12 col-md-6 p-0 m-0 mx-auto mt-4">
 				<div class="col">
-					{{ form_widget(form.role, {'attr': {'class': 'form-control'}})}}
+					{{ form_widget(form.users.role, {'attr': {'class': 'form-control'}})}}
 				</div>
 			</div>
 			<div class="mt-4 d-flex justify-content-center">

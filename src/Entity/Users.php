@@ -12,13 +12,13 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\EmployeeRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\UsersRepository")
  *  @UniqueEntity(fields={"email", "phonenumber"},
  *     errorPath="port",
  *     message="Email ou numéro de téléphone déjà utilisé."
  * )
  */
-class Employee implements UserInterface
+class Users implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -28,13 +28,18 @@ class Employee implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Type("string")
      */
     private $lastname;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Type("string")
      */
     private $firstname;
@@ -98,6 +103,16 @@ class Employee implements UserInterface
      */
     private $password;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Address", mappedBy="users")
+     */
+    private $address;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ProviderDevice", mappedBy="users")
+     */
+    private $providerDevices;
+
     
 
     public function __construct()
@@ -107,11 +122,25 @@ class Employee implements UserInterface
         $this->setDateCreate(new \DateTime('now'));
         $this->date_update = new \DateTime();
         $this->repairs = new ArrayCollection();
+        $this->address = new ArrayCollection();
+        $this->providerDevices = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     public function getLastname(): ?string
@@ -222,7 +251,7 @@ class Employee implements UserInterface
     {
         if (!$this->repairs->contains($repair)) {
             $this->repairs[] = $repair;
-            $repair->setEmp($this);
+            $repair->setUsers($this);
         }
 
         return $this;
@@ -233,8 +262,8 @@ class Employee implements UserInterface
         if ($this->repairs->contains($repair)) {
             $this->repairs->removeElement($repair);
             // set the owning side to null (unless already changed)
-            if ($repair->getEmp() === $this) {
-                $repair->setEmp(null);
+            if ($repair->getUsers() === $this) {
+                $repair->setUsers(null);
             }
         }
 
@@ -277,8 +306,8 @@ class Employee implements UserInterface
     {
         $roles = [];
         $roles[] = $this->role;
-        $roles[] = 'ROLE_USER';
-        return array_unique($roles);
+        // $roles[] = 'ROLE_USER';
+        return $roles;
     }
 
     public function getSalt()
@@ -308,5 +337,66 @@ class Employee implements UserInterface
     public function eraseCredentials()
     {
     }
-    
+
+    /**
+     * @return Collection|Address[]
+     */
+    public function getAddress(): Collection
+    {
+        return $this->address;
+    }
+
+    public function addAddress(Address $address): self
+    {
+        if (!$this->address->contains($address)) {
+            $this->address[] = $address;
+            $address->setUsers($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAddress(Address $address): self
+    {
+        if ($this->address->contains($address)) {
+            $this->address->removeElement($address);
+            // set the owning side to null (unless already changed)
+            if ($address->getUsers() === $this) {
+                $address->setUsers(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ProviderDevice[]
+     */
+    public function getProviderDevices(): Collection
+    {
+        return $this->providerDevices;
+    }
+
+    public function addProviderDevice(ProviderDevice $providerDevice): self
+    {
+        if (!$this->providerDevices->contains($providerDevice)) {
+            $this->providerDevices[] = $providerDevice;
+            $providerDevice->setUsers($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProviderDevice(ProviderDevice $providerDevice): self
+    {
+        if ($this->providerDevices->contains($providerDevice)) {
+            $this->providerDevices->removeElement($providerDevice);
+            // set the owning side to null (unless already changed)
+            if ($providerDevice->getUsers() === $this) {
+                $providerDevice->setUsers(null);
+            }
+        }
+
+        return $this;
+    }
 }

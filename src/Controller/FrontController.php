@@ -20,21 +20,20 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class FrontController extends AbstractController
 {
     
-    /**
-     * @Route("/login", name="app_login")
-     */
-    public function login(AuthenticationUtils $authenticationUtils): Response
-    {
-        if ($this->getUser()) {
-            return $this->redirectToRoute('/uptache');
-        }
-        // get the login error if there is one
-        $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername();
-
-        return $this->render('front/connection.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
-    }
+    // /**
+    //  * @Route("/login", name="app_login")
+    //  */
+    // public function frontLogin(AuthenticationUtils $authenticationUtils): Response
+    // {
+    //     if ($this->getUser()) {
+    //         return $this->redirectToRoute('/uptache');
+    //     }
+    //     // get the login error if there is one
+    //     $error = $authenticationUtils->getLastAuthenticationError();
+    //     // last username entered by the user
+    //     $lastUsername = $authenticationUtils->getLastUsername();
+    //     return $this->render('front/connection.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+    // }
 
     /**
      * @Route("/logout", name="app_logout")
@@ -55,9 +54,6 @@ class FrontController extends AbstractController
             ->findBy(['rep' => $idrepair]);
         $formRepair = $this->createForm(EditTacheType::class, $repair);
         $formRepair->handleRequest($request);
-        // $status = $entityManager->getRepository(Status::class)
-        //                     ->find(['id' => $id->getId()]);
-        // dd($idrepair);
         if ($formRepair->isSubmitted() && $formRepair->isValid()) {
             /** @var UploadedFile $image */
             $image = $formRepair['image']->getData();
@@ -83,7 +79,7 @@ class FrontController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $employee = $this->getUser();
         $repair = new Repair();
-        $repair->setEmp($employee);
+        $repair->setUsers($employee);
         $form = $this->createForm(TacheType::class, $repair);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
